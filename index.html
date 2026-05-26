@@ -16,7 +16,6 @@
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);}
 body{display:flex;flex-direction:column;overflow:hidden;}
-
 .header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--surface);flex-shrink:0}
 .logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
 .header-info h1{font-size:13px;font-weight:600}
@@ -25,15 +24,11 @@ body{display:flex;flex-direction:column;overflow:hidden;}
 .hstat{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:10px;color:var(--text2);display:flex;align-items:center;gap:3px;white-space:nowrap}
 .hstat b{color:var(--text);font-size:11px}
 .conn-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:background .3s}
-.conn-dot.online{background:var(--accent2)}
-.conn-dot.error{background:var(--danger)}
-
+.conn-dot.online{background:var(--accent2)}.conn-dot.error{background:var(--danger)}
 .view-tabs{display:none;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
 .view-tabs .vtab{flex:1;padding:10px;font-size:12.5px;font-weight:500;text-align:center;cursor:pointer;color:var(--text2);border:none;background:none;border-bottom:2px solid transparent;transition:all .15s}
 .view-tabs .vtab.active{color:var(--accent);border-bottom-color:var(--accent)}
-
 .main{display:grid;grid-template-columns:1fr 1.15fr;flex:1;overflow:hidden;min-height:0}
-
 .chat-panel{display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border)}
 .panel-label{padding:7px 14px;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
 .qbtns{padding:6px 12px;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
@@ -57,9 +52,7 @@ textarea{flex:1;background:var(--surface2);border:1px solid var(--border);border
 textarea:focus{border-color:var(--accent)}
 textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5px}
 .send-btn{width:38px;height:38px;border-radius:10px;background:var(--accent);border:none;cursor:pointer;color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
-.send-btn:active{background:#3a8fff;transform:scale(.96)}
-.send-btn:disabled{background:var(--surface3);cursor:not-allowed}
-
+.send-btn:active{transform:scale(.96)}.send-btn:disabled{background:var(--surface3);cursor:not-allowed}
 .rekap-panel{display:flex;flex-direction:column;overflow:hidden;background:var(--surface)}
 .rekap-top{padding:7px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:5px;flex-shrink:0}
 .rtabs{display:flex;gap:3px}
@@ -67,11 +60,9 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
 .tab.active{background:var(--surface3);border-color:var(--border);color:var(--text)}
 .top-actions{display:flex;gap:5px;margin-left:auto}
 .copy-btn,.clear-btn{font-size:11px;padding:4px 9px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;cursor:pointer;color:var(--text2);transition:all .15s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
-.copy-btn:active{color:var(--text);border-color:var(--accent2)}
-.clear-btn:active{color:var(--danger);border-color:var(--danger)}
+.copy-btn:active{color:var(--text);border-color:var(--accent2)}.clear-btn:active{color:var(--danger);border-color:var(--danger)}
 .rekap-scroll{flex:1;overflow-y:auto;padding:10px;-webkit-overflow-scrolling:touch}
 .rekap-scroll::-webkit-scrollbar{width:0}
-
 .date-group{margin-bottom:14px}
 .date-lbl{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
 .date-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
@@ -79,33 +70,25 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
 .cab-head{padding:7px 10px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
 .cab-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .dot-sukun{background:var(--sukun)}.dot-dau{background:var(--dau)}
-.cab-name{font-size:12px;font-weight:600}
-.cab-sukun{color:var(--sukun)}.cab-dau{color:var(--dau)}
+.cab-name{font-size:12px;font-weight:600}.cab-sukun{color:var(--sukun)}.cab-dau{color:var(--dau)}
 .cab-count{margin-left:auto;font-size:10px;color:var(--text3);font-family:var(--mono);background:var(--surface3);padding:2px 6px;border-radius:8px}
-
 .row-head{display:grid;grid-template-columns:48px 1fr 1fr 52px;gap:5px;padding:4px 10px;font-size:9.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border)}
 .patient-row{display:grid;grid-template-columns:48px 1fr 1fr 52px;gap:5px;padding:6px 10px;font-size:12px;align-items:center;border-bottom:1px solid var(--border);transition:background .1s}
-.patient-row:last-child{border-bottom:none}
-.patient-row:hover{background:var(--surface3)}
-.pr-jam{font-family:var(--mono);font-weight:500;font-size:11px}
-.pr-nama{color:var(--text)}.pr-rawat{color:var(--text2);font-size:11px}
+.patient-row:last-child{border-bottom:none}.patient-row:hover{background:var(--surface3)}
+.pr-jam{font-family:var(--mono);font-weight:500;font-size:11px}.pr-nama{color:var(--text)}.pr-rawat{color:var(--text2);font-size:11px}
 .pr-actions{display:flex;gap:3px;justify-content:flex-end}
 .act-btn{width:26px;height:26px;border-radius:5px;border:1px solid var(--border);background:var(--surface3);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
 .act-btn:active{transform:scale(.9)}
-
 .patient-card{padding:9px 10px;border-bottom:1px solid var(--border)}
 .patient-card:last-child{border-bottom:none}
 .pc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
-.pc-nama{font-size:13px;font-weight:500;color:var(--text)}
-.pc-jam{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--text)}
+.pc-nama{font-size:13px;font-weight:500;color:var(--text)}.pc-jam{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--text)}
 .pc-rawat{font-size:11.5px;color:var(--text2)}
 .pc-actions{display:flex;gap:5px;margin-top:6px}
 .pc-btn{flex:1;padding:6px;border-radius:7px;border:1px solid var(--border);background:var(--surface3);cursor:pointer;font-size:12px;color:var(--text2);text-align:center;-webkit-tap-highlight-color:transparent}
 .pc-btn:active{transform:scale(.97)}
-
 .no-data{text-align:center;padding:30px 0;color:var(--text3);font-size:13px}
 .no-data-icon{font-size:24px;margin-bottom:8px}
-
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:flex;align-items:flex-end;justify-content:center}
 @media(min-width:600px){.overlay{align-items:center}}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:420px}
@@ -118,38 +101,28 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
 .field select option{background:var(--surface2)}
 .modal-btns{display:flex;gap:8px;margin-top:16px}
 .mbtn{flex:1;padding:11px;border-radius:9px;font-size:14px;font-weight:500;cursor:pointer;border:1px solid var(--border);-webkit-tap-highlight-color:transparent}
-.mbtn.save{background:var(--accent);color:#fff;border-color:var(--accent)}
-.mbtn.cancel{background:var(--surface2);color:var(--text2)}
+.mbtn.save{background:var(--accent);color:#fff;border-color:var(--accent)}.mbtn.cancel{background:var(--surface2);color:var(--text2)}
 .confirm-box{background:var(--surface);border:1px solid var(--danger);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:380px;text-align:center}
 @media(min-width:600px){.confirm-box{border-radius:14px;width:300px}}
 .confirm-box p{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6}
 .confirm-btns{display:flex;gap:8px}
 .cbtn{flex:1;padding:11px;border-radius:9px;font-size:14px;font-weight:500;cursor:pointer;border:none;-webkit-tap-highlight-color:transparent}
-.cbtn.yes{background:var(--danger);color:#fff}
-.cbtn.no{background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
-
+.cbtn.yes{background:var(--danger);color:#fff}.cbtn.no{background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
 @media(max-width:640px){
   .view-tabs{display:flex}
   .main{grid-template-columns:1fr;position:relative}
   .chat-panel{position:absolute;inset:0;transition:transform .25s ease;z-index:1}
   .rekap-panel{position:absolute;inset:0;transition:transform .25s ease;z-index:1}
-  .chat-panel.hidden{transform:translateX(-100%)}
-  .rekap-panel.hidden{transform:translateX(100%)}
-  .panel-label{display:none}
-  .row-head,.patient-row{display:none}
-  .hstat.hide-mobile{display:none}
+  .chat-panel.hidden{transform:translateX(-100%)}.rekap-panel.hidden{transform:translateX(100%)}
+  .panel-label{display:none}.row-head,.patient-row{display:none}.hstat.hide-mobile{display:none}
 }
 @media(min-width:641px){.patient-card{display:none}}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="logo">🦷</div>
-  <div class="header-info">
-    <h1>Rekap Reservasi Klinik</h1>
-    <p>Malang Sukun &amp; Dau</p>
-  </div>
+  <div class="header-info"><h1>Rekap Reservasi Klinik</h1><p>Malang Sukun &amp; Dau</p></div>
   <div class="hstats">
     <div class="hstat">Total: <b id="hTot">0</b></div>
     <div class="hstat hide-mobile" style="color:var(--sukun)">Sukun: <b id="hSukun">0</b></div>
@@ -157,12 +130,10 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
     <div class="hstat"><div class="conn-dot" id="connDot"></div><span id="connTxt" style="font-size:9.5px">Menghubungkan...</span></div>
   </div>
 </div>
-
 <div class="view-tabs">
   <button class="vtab active" id="vtabChat" onclick="switchView('chat')">💬 Input</button>
   <button class="vtab" id="vtabRekap" onclick="switchView('rekap')">📋 Rekap</button>
 </div>
-
 <div class="main">
   <div class="chat-panel" id="chatPanel">
     <div class="panel-label">💬 Input Reservasi</div>
@@ -177,7 +148,6 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
       <button class="send-btn" id="sendBtn" onclick="send()">&#9654;</button>
     </div>
   </div>
-
   <div class="rekap-panel hidden" id="rekapPanel">
     <div class="rekap-top">
       <div class="rtabs">
@@ -194,17 +164,12 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
     </div>
   </div>
 </div>
-
-<!-- MODAL EDIT -->
 <div class="overlay" id="editOverlay" style="display:none">
   <div class="modal">
-    <h3>&#9998;&#65039; Edit Data Pasien</h3>
+    <h3>&#9998; Edit Data Pasien</h3>
     <div class="field"><label>Nama</label><input id="eNama" type="text"/></div>
     <div class="field"><label>Cabang</label>
-      <select id="eCabang">
-        <option value="Malang Sukun">Malang Sukun</option>
-        <option value="Dau">Dau</option>
-      </select>
+      <select id="eCabang"><option value="Malang Sukun">Malang Sukun</option><option value="Dau">Dau</option></select>
     </div>
     <div class="field"><label>Perawatan</label><input id="ePerawatan" type="text"/></div>
     <div class="field"><label>Hari/Tanggal</label><input id="eTanggal" type="text" placeholder="26 Mei 2026"/></div>
@@ -215,23 +180,19 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
     </div>
   </div>
 </div>
-
-<!-- CONFIRM HAPUS -->
 <div class="overlay" id="confirmOverlay" style="display:none">
   <div class="confirm-box">
-    <div style="font-size:28px;margin-bottom:10px">&#128465;&#65039;</div>
-    <p>Hapus data pasien<br><b id="confirmName">-</b>?<br><span style="font-size:11px">Tindakan ini tidak bisa dibatalkan.</span></p>
+    <div style="font-size:28px;margin-bottom:10px">&#128465;</div>
+    <p>Hapus data pasien<br><b id="confirmName">-</b>?<br><span style="font-size:11px">Tidak bisa dibatalkan.</span></p>
     <div class="confirm-btns">
       <button class="cbtn no" onclick="document.getElementById('confirmOverlay').style.display='none'">Batal</button>
       <button class="cbtn yes" onclick="doDelete()">Hapus</button>
     </div>
   </div>
 </div>
-
-<!-- CONFIRM HAPUS SEMUA -->
 <div class="overlay" id="clearOverlay" style="display:none">
   <div class="confirm-box">
-    <div style="font-size:28px;margin-bottom:10px">&#9888;&#65039;</div>
+    <div style="font-size:28px;margin-bottom:10px">&#9888;</div>
     <p>Hapus <b>semua data</b> reservasi?<br><span style="font-size:11px">Semua rekap akan terhapus permanen.</span></p>
     <div class="confirm-btns">
       <button class="cbtn no" onclick="document.getElementById('clearOverlay').style.display='none'">Batal</button>
@@ -241,16 +202,15 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
 </div>
 
 <script>
-// ── CONFIG SUPABASE ──────────────────────────────────────────────────────────
+// ── CONFIG — URL tanpa /rest/v1/ di akhir ────────────────────────────────────
 var SUPA_URL = 'https://cbeibyxbkcwfukbnnewy.supabase.co';
 var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZWlieXhia2N3ZnVrYm5uZXd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3ODY4NDcsImV4cCI6MjA5NTM2Mjg0N30.iUrBvdDmHytzj-PTG8p2YZUtwkNNcGmDE89HLo77mh8';
-var HEADERS = {'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
+var API = SUPA_URL + '/rest/v1/reservasi';
 
-// ── STATE ────────────────────────────────────────────────────────────────────
-var allData = []; // flat array dari Supabase
+var allData = [];
 var activeTab = 'semua';
-var editTarget = null; // {id, ...}
-var deleteTarget = null; // {id, nama}
+var editTarget = null;
+var deleteTarget = null;
 
 var SAMPLES = [
   "Reservasi\nNama : Diana\nCabang : Malang Sukun\nPerawatan : Kontrol Tambal Gigi\nHari/Tanggal : 26 Mei 2026\nJam : 13.00",
@@ -258,315 +218,387 @@ var SAMPLES = [
   "Reservasi\nNama : Sari Dewi\nCabang : Dau\nPerawatan : Scaling\nHari/Tanggal : 27 Mei 2026\nJam : 09.00"
 ];
 
-// ── SUPABASE API ─────────────────────────────────────────────────────────────
-async function sbFetch(path, method, body){
-  var res = await fetch(SUPA_URL+'/rest/v1/'+path, {
-    method: method||'GET',
-    headers: Object.assign({}, HEADERS, method==='GET'?{'Accept':'application/json'}:{}),
-    body: body ? JSON.stringify(body) : undefined
-  });
-  if(!res.ok){ var e=await res.text(); throw new Error(e); }
-  var txt = await res.text();
-  return txt ? JSON.parse(txt) : null;
+// ── SUPABASE HELPERS ─────────────────────────────────────────────────────────
+function hdr(extra) {
+  var h = {
+    'apikey': SUPA_KEY,
+    'Authorization': 'Bearer ' + SUPA_KEY,
+    'Content-Type': 'application/json'
+  };
+  if (extra) { for (var k in extra) h[k] = extra[k]; }
+  return h;
 }
 
-async function loadData(){
+async function dbSelect() {
+  var r = await fetch(API + '?select=*&order=created_at.asc', {
+    method: 'GET', headers: hdr()
+  });
+  if (!r.ok) throw new Error('GET ' + r.status + ': ' + await r.text());
+  return await r.json();
+}
+
+async function dbInsert(row) {
+  var r = await fetch(API, {
+    method: 'POST',
+    headers: hdr({ 'Prefer': 'return=representation' }),
+    body: JSON.stringify(row)
+  });
+  var txt = await r.text();
+  if (!r.ok) throw new Error('POST ' + r.status + ': ' + txt);
+  var arr = JSON.parse(txt);
+  return Array.isArray(arr) ? arr[0] : arr;
+}
+
+async function dbUpdate(id, row) {
+  var r = await fetch(API + '?id=eq.' + id, {
+    method: 'PATCH',
+    headers: hdr({ 'Prefer': 'return=minimal' }),
+    body: JSON.stringify(row)
+  });
+  if (!r.ok) throw new Error('PATCH ' + r.status + ': ' + await r.text());
+}
+
+async function dbDelete(id) {
+  var r = await fetch(API + '?id=eq.' + id, {
+    method: 'DELETE', headers: hdr()
+  });
+  if (!r.ok) throw new Error('DELETE ' + r.status + ': ' + await r.text());
+}
+
+async function dbDeleteAll() {
+  var r = await fetch(API + '?id=gte.0', {
+    method: 'DELETE', headers: hdr()
+  });
+  if (!r.ok) throw new Error('DELETE ALL ' + r.status + ': ' + await r.text());
+}
+
+// ── CONN ─────────────────────────────────────────────────────────────────────
+function setConn(s) {
+  var dot = document.getElementById('connDot'), txt = document.getElementById('connTxt');
+  if (s === 'online') { dot.className = 'conn-dot online'; txt.textContent = 'Terhubung'; }
+  else if (s === 'error') { dot.className = 'conn-dot error'; txt.textContent = 'Gagal'; }
+  else { dot.className = 'conn-dot'; txt.textContent = 'Memuat...'; }
+}
+
+async function loadData() {
   setConn('loading');
-  try{
-    allData = await sbFetch('reservasi?select=*&order=created_at.asc') || [];
+  try {
+    allData = await dbSelect();
     setConn('online');
-    renderRekap();
-    updateStats();
-  }catch(e){
+    renderRekap(); updateStats();
+  } catch(e) {
+    console.error('loadData:', e);
     setConn('error');
-    addMsg('Gagal memuat data. Periksa koneksi internet.','bot');
+    addMsg('Gagal memuat data: ' + e.message, 'bot');
   }
 }
 
-async function insertData(row){
-  var res = await sbFetch('reservasi?select=*', 'POST',
-    {nama:row.nama, cabang:row.cabang, perawatan:row.perawatan, tanggal:row.tanggal, jam:row.jam});
-  // Supabase returns array
-  return Array.isArray(res) ? res[0] : res;
-}
-
-async function updateData(id, row){
-  await sbFetch('reservasi?id=eq.'+id, 'PATCH',
-    {nama:row.nama, cabang:row.cabang, perawatan:row.perawatan, tanggal:row.tanggal, jam:row.jam});
-}
-
-async function deleteData(id){
-  await sbFetch('reservasi?id=eq.'+id, 'DELETE');
-}
-
-async function deleteAll(){
-  await sbFetch('reservasi?id=gte.0', 'DELETE');
-}
-
-// ── CONN STATUS ──────────────────────────────────────────────────────────────
-function setConn(s){
-  var dot=document.getElementById('connDot'), txt=document.getElementById('connTxt');
-  if(s==='online'){dot.className='conn-dot online';txt.textContent='Terhubung';}
-  else if(s==='error'){dot.className='conn-dot error';txt.textContent='Offline';}
-  else{dot.className='conn-dot';txt.textContent='Memuat...';}
-}
-
-// ── MOBILE VIEW ──────────────────────────────────────────────────────────────
-function switchView(v){
-  var cp=document.getElementById('chatPanel'),rp=document.getElementById('rekapPanel');
-  var vt1=document.getElementById('vtabChat'),vt2=document.getElementById('vtabRekap');
-  if(v==='chat'){cp.classList.remove('hidden');rp.classList.add('hidden');vt1.classList.add('active');vt2.classList.remove('active');}
-  else{rp.classList.remove('hidden');cp.classList.add('hidden');vt2.classList.add('active');vt1.classList.remove('active');}
+// ── MOBILE ───────────────────────────────────────────────────────────────────
+function switchView(v) {
+  var cp = document.getElementById('chatPanel'), rp = document.getElementById('rekapPanel');
+  var t1 = document.getElementById('vtabChat'), t2 = document.getElementById('vtabRekap');
+  if (v === 'chat') { cp.classList.remove('hidden'); rp.classList.add('hidden'); t1.classList.add('active'); t2.classList.remove('active'); }
+  else { rp.classList.remove('hidden'); cp.classList.add('hidden'); t2.classList.add('active'); t1.classList.remove('active'); }
 }
 
 // ── HELPERS ──────────────────────────────────────────────────────────────────
-function nowTime(){return new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});}
-function autoH(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
-function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
-function fillS(i){var t=document.getElementById('inp');t.value=SAMPLES[i];autoH(t);t.focus();}
-function normCab(c){var l=c.toLowerCase();if(l.includes('sukun')||l.includes('malang'))return'Malang Sukun';if(l.includes('dau'))return'Dau';return null;}
-function cabKey(c){return c.toLowerCase().includes('sukun')?'sukun':'dau';}
-function toMins(t){var s=(t||'0').replace(',','.').replace(':','.');var p=s.split('.');return(parseInt(p[0])||0)*60+(parseInt(p[1])||0);}
-function dateScore(s){
-  var b={januari:1,februari:2,maret:3,april:4,mei:5,juni:6,juli:7,agustus:8,september:9,oktober:10,november:11,desember:12};
-  var m=s.match(/(\d+)\s+(\w+)\s+(\d+)/);
-  if(!m)return 0;
-  return parseInt(m[3])*10000+(b[m[2].toLowerCase()]||0)*100+parseInt(m[1]);
+function nowTime() { return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); }
+function autoH(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 100) + 'px'; }
+function onKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
+function fillS(i) { var t = document.getElementById('inp'); t.value = SAMPLES[i]; autoH(t); t.focus(); }
+function safe(v) { return (v && typeof v === 'string') ? v.trim() : (v || ''); }
+function normCab(c) {
+  if (!c) return null;
+  var l = c.toLowerCase();
+  if (l.includes('sukun') || l.includes('malang')) return 'Malang Sukun';
+  if (l.includes('dau')) return 'Dau';
+  return null;
 }
-function todayStr(){
-  return new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+function cabKey(c) { return (c || '').toLowerCase().includes('sukun') ? 'sukun' : 'dau'; }
+function toMins(t) {
+  var s = (t || '0').toString().replace(',', '.').replace(':', '.');
+  var p = s.split('.');
+  return (parseInt(p[0]) || 0) * 60 + (parseInt(p[1]) || 0);
+}
+function dateScore(s) {
+  var b = { januari:1,februari:2,maret:3,april:4,mei:5,juni:6,juli:7,agustus:8,september:9,oktober:10,november:11,desember:12 };
+  var m = s.match(/(\d+)\s+(\w+)\s+(\d+)/);
+  if (!m) return 0;
+  return parseInt(m[3]) * 10000 + (b[m[2].toLowerCase()] || 0) * 100 + parseInt(m[1]);
 }
 
 // ── PARSER ───────────────────────────────────────────────────────────────────
-function parse(msg){
-  if(!/reservasi/i.test(msg))return null;
-  function g(label){var m=msg.match(new RegExp(label+'\\s*[:\\-]\\s*(.+)','im'));return m?m[1].trim():null;}
-  var nama=g('nama'),cabangRaw=g('cabang');
-  if(!nama||!cabangRaw)return null;
-  var cabang=normCab(cabangRaw);
-  if(!cabang)return{error:'Cabang "'+cabangRaw+'" tidak dikenal. Tersedia: Malang Sukun, Dau.'};
-  return{nama:nama,cabang:cabang,perawatan:g('perawatan')||'-',tanggal:g('hari\\/tanggal|tanggal|hari')||'-',jam:g('jam')||'-'};
+function parse(msg) {
+  if (!msg || !/reservasi/i.test(msg)) return null;
+
+  // Ambil nilai setelah label, toleran terhadap spasi & variasi
+  function get(labels) {
+    for (var i = 0; i < labels.length; i++) {
+      var re = new RegExp(labels[i] + '\\s*[:\\-]\\s*([^\\n]+)', 'im');
+      var m = msg.match(re);
+      if (m && m[1] && m[1].trim()) return m[1].trim();
+    }
+    return null;
+  }
+
+  var nama      = get(['nama']);
+  var cabangRaw = get(['cabang']);
+  var perawatan = get(['perawatan']);
+  var tanggal   = get(['hari\\/tanggal', 'hari / tanggal', 'tanggal', 'hari']);
+  var jam       = get(['jam']);
+
+  if (!nama || !cabangRaw) return null;
+
+  var cabang = normCab(cabangRaw);
+  if (!cabang) return { error: 'Cabang "' + cabangRaw + '" tidak dikenal. Tersedia: Malang Sukun, Dau.' };
+
+  return {
+    nama:      nama,
+    cabang:    cabang,
+    perawatan: perawatan || '-',
+    tanggal:   tanggal   || '-',
+    jam:       jam       || '-'
+  };
 }
 
 // ── CHAT ─────────────────────────────────────────────────────────────────────
-function addMsg(text,type){
-  var box=document.getElementById('msgs');
-  var d=document.createElement('div');d.className='msg '+type;
-  var b=document.createElement('div');b.className='bubble';
-  if(type==='user'){b.textContent=text;}else{b.innerHTML=text;}
-  var t=document.createElement('div');t.className='msg-time';t.textContent=nowTime();
-  d.appendChild(b);d.appendChild(t);box.appendChild(d);box.scrollTop=box.scrollHeight;
+function addMsg(text, type) {
+  var box = document.getElementById('msgs');
+  var d = document.createElement('div'); d.className = 'msg ' + type;
+  var b = document.createElement('div'); b.className = 'bubble';
+  if (type === 'user') { b.textContent = text; } else { b.innerHTML = text; }
+  var t = document.createElement('div'); t.className = 'msg-time'; t.textContent = nowTime();
+  d.appendChild(b); d.appendChild(t); box.appendChild(d); box.scrollTop = box.scrollHeight;
 }
-function showTyping(){
-  var box=document.getElementById('msgs');
-  var d=document.createElement('div');d.className='msg bot';d.id='typing';
-  d.innerHTML='<div class="typing-bbl"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
-  box.appendChild(d);box.scrollTop=box.scrollHeight;
+function showTyping() {
+  var box = document.getElementById('msgs');
+  var d = document.createElement('div'); d.className = 'msg bot'; d.id = 'typing';
+  d.innerHTML = '<div class="typing-bbl"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
+  box.appendChild(d); box.scrollTop = box.scrollHeight;
 }
-function removeTyping(){var t=document.getElementById('typing');if(t)t.remove();}
-function setBtn(disabled){document.getElementById('sendBtn').disabled=disabled;}
+function removeTyping() { var t = document.getElementById('typing'); if (t) t.remove(); }
+function setBtn(dis) { document.getElementById('sendBtn').disabled = dis; }
 
-async function send(){
-  var inp=document.getElementById('inp');
-  var msg=inp.value.trim();if(!msg)return;
-  inp.value='';inp.style.height='auto';
-  addMsg(msg,'user');showTyping();setBtn(true);
-  try{
-    var p=parse(msg);
-    if(p){
-      if(p.error){removeTyping();addMsg('Peringatan: '+p.error,'bot');setBtn(false);return;}
-      var saved = await insertData(p);
-      if(saved) allData.push(saved);
-      renderRekap();updateStats();
+async function send() {
+  var inp = document.getElementById('inp');
+  var msg = inp.value.trim();
+  if (!msg) return;
+  inp.value = ''; inp.style.height = 'auto';
+  addMsg(msg, 'user'); showTyping(); setBtn(true);
+  try {
+    var p = parse(msg);
+    if (p) {
+      if (p.error) { removeTyping(); addMsg('&#9888; ' + p.error, 'bot'); setBtn(false); return; }
+      var saved = await dbInsert({ nama: p.nama, cabang: p.cabang, perawatan: p.perawatan, tanggal: p.tanggal, jam: p.jam });
+      if (saved) allData.push(saved);
+      renderRekap(); updateStats(); removeTyping();
+      addMsg(
+        '<div style="margin-bottom:4px">&#10003; Berhasil direkap! <b>' + p.nama + '</b></div>' +
+        '<div style="font-size:11.5px;color:#8B92A9;line-height:1.9">&#128205; ' + p.cabang + '<br>&#129463; ' + p.perawatan + '<br>&#128197; ' + p.tanggal + ' &middot; &#128336; ' + p.jam + '</div>',
+        'bot'
+      );
+      if (window.innerWidth <= 640) { setTimeout(function() { switchView('rekap'); }, 600); }
+    } else {
       removeTyping();
-      addMsg('<div style="margin-bottom:4px">Berhasil direkap! <b>'+p.nama+'</b></div>'+
-        '<div style="font-size:11.5px;color:#8B92A9;line-height:1.9">&#128205; '+p.cabang+'<br>&#129463; '+p.perawatan+'<br>&#128197; '+p.tanggal+' &middot; &#128336; '+p.jam+'</div>','bot');
-      if(window.innerWidth<=640){setTimeout(function(){switchView('rekap');},600);}
-    }else{
-      removeTyping();
-      addMsg('Format tidak dikenali. Gunakan:<br><br><span style="font-family:var(--mono);font-size:11px;color:#8B92A9;line-height:2">Reservasi<br>Nama : ...<br>Cabang : Malang Sukun / Dau<br>Perawatan : ...<br>Hari/Tanggal : ...<br>Jam : ...</span>','bot');
+      addMsg(
+        'Format tidak dikenali. Gunakan:<br><br>' +
+        '<span style="font-family:var(--mono);font-size:11px;color:#8B92A9;line-height:2">' +
+        'Reservasi<br>Nama : ...<br>Cabang : Malang Sukun / Dau<br>' +
+        'Perawatan : ...<br>Hari/Tanggal : ...<br>Jam : ...</span>',
+        'bot'
+      );
     }
-  }catch(e){
+  } catch(e) {
+    console.error('send:', e);
     removeTyping();
-    addMsg('Gagal menyimpan. Periksa koneksi internet.','bot');
+    addMsg('Gagal menyimpan: ' + e.message, 'bot');
   }
   setBtn(false);
 }
 
-// ── STATS ─────────────────────────────────────────────────────────────────────
-function updateStats(){
-  var tot=allData.length, sukun=0, dau=0;
-  allData.forEach(function(r){if(r.cabang==='Malang Sukun')sukun++;else dau++;});
-  document.getElementById('hTot').textContent=tot;
-  document.getElementById('hSukun').textContent=sukun;
-  document.getElementById('hDau').textContent=dau;
+// ── STATS ────────────────────────────────────────────────────────────────────
+function updateStats() {
+  var tot = allData.length, sukun = 0, dau = 0;
+  allData.forEach(function(r) { if (r.cabang === 'Malang Sukun') sukun++; else dau++; });
+  document.getElementById('hTot').textContent = tot;
+  document.getElementById('hSukun').textContent = sukun;
+  document.getElementById('hDau').textContent = dau;
 }
 
-// ── REKAP RENDER ──────────────────────────────────────────────────────────────
-function setTab(t,el){activeTab=t;document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});el.classList.add('active');renderRekap();}
+// ── REKAP ────────────────────────────────────────────────────────────────────
+function setTab(t, el) {
+  activeTab = t;
+  document.querySelectorAll('.tab').forEach(function(x) { x.classList.remove('active'); });
+  el.classList.add('active'); renderRekap();
+}
 
-function groupData(){
-  var grouped={};
-  var filtered=activeTab==='hari'?allData.filter(function(r){return r.tanggal&&r.tanggal.toLowerCase().includes(todayStr().toLowerCase().split(' ')[0])||r.tanggal===todayStr();}):allData;
-  filtered.forEach(function(r){
-    var tgl=r.tanggal||'-';
-    if(!grouped[tgl])grouped[tgl]={};
-    if(!grouped[tgl][r.cabang])grouped[tgl][r.cabang]=[];
+function groupData() {
+  var grouped = {};
+  allData.forEach(function(r) {
+    var tgl = r.tanggal || '-';
+    if (!grouped[tgl]) grouped[tgl] = {};
+    if (!grouped[tgl][r.cabang]) grouped[tgl][r.cabang] = [];
     grouped[tgl][r.cabang].push(r);
   });
   return grouped;
 }
 
-function renderRekap(){
-  var area=document.getElementById('rekapArea');
-  if(!allData.length){
-    area.innerHTML='<div class="no-data"><div class="no-data-icon">&#128203;</div>Belum ada reservasi.<br><span style="font-size:11px">Masukkan pesan reservasi di tab Input.</span></div>';
+function renderRekap() {
+  var area = document.getElementById('rekapArea');
+  if (!allData.length) {
+    area.innerHTML = '<div class="no-data"><div class="no-data-icon">&#128203;</div>Belum ada reservasi.<br><span style="font-size:11px">Masukkan pesan di tab Input.</span></div>';
     return;
   }
-  var grouped=groupData();
-  var dates=Object.keys(grouped).sort(function(a,b){return dateScore(a)-dateScore(b);});
-  if(!dates.length){
-    area.innerHTML='<div class="no-data"><div class="no-data-icon">&#128197;</div>Tidak ada data hari ini.</div>';
-    return;
-  }
-  var html='';
-  dates.forEach(function(tgl){
-    var cabOrder=['Malang Sukun','Dau'];
-    var presentCabs=cabOrder.filter(function(c){return grouped[tgl][c]&&grouped[tgl][c].length>0;});
-    if(!presentCabs.length)return;
-    html+='<div class="date-group"><div class="date-lbl">'+tgl+'</div>';
-    presentCabs.forEach(function(cab){
-      var ck=cabKey(cab);
-      var rows=grouped[tgl][cab].slice().sort(function(a,b){return toMins(a.jam)-toMins(b.jam);});
-      html+='<div class="cab-block"><div class="cab-head"><div class="cab-dot dot-'+ck+'"></div><span class="cab-name cab-'+ck+'">'+cab+'</span><span class="cab-count">'+rows.length+' pasien</span></div>';
-      // Desktop
-      html+='<div class="row-head"><span>Jam</span><span>Nama</span><span>Perawatan</span><span></span></div>';
-      rows.forEach(function(r){
-        html+='<div class="patient-row"><span class="pr-jam">'+r.jam+'</span><span class="pr-nama">'+r.nama+'</span><span class="pr-rawat">'+r.perawatan+'</span>';
-        html+='<span class="pr-actions"><button class="act-btn edit" onclick="openEdit('+r.id+')">&#9998;</button>';
-        html+='<button class="act-btn del" onclick="openConfirm('+r.id+',\''+encodeURIComponent(r.nama)+'\')">&#128465;</button></span></div>';
+  var grouped = groupData();
+  var dates = Object.keys(grouped).sort(function(a, b) { return dateScore(a) - dateScore(b); });
+  var html = '';
+  dates.forEach(function(tgl) {
+    var cabs = ['Malang Sukun', 'Dau'].filter(function(c) { return grouped[tgl][c] && grouped[tgl][c].length > 0; });
+    if (!cabs.length) return;
+    html += '<div class="date-group"><div class="date-lbl">' + tgl + '</div>';
+    cabs.forEach(function(cab) {
+      var ck = cabKey(cab);
+      var rows = grouped[tgl][cab].slice().sort(function(a, b) { return toMins(a.jam) - toMins(b.jam); });
+      html += '<div class="cab-block">';
+      html += '<div class="cab-head"><div class="cab-dot dot-' + ck + '"></div><span class="cab-name cab-' + ck + '">' + cab + '</span><span class="cab-count">' + rows.length + ' pasien</span></div>';
+      html += '<div class="row-head"><span>Jam</span><span>Nama</span><span>Perawatan</span><span></span></div>';
+      rows.forEach(function(r) {
+        var id = r.id;
+        var namaEnc = encodeURIComponent(r.nama);
+        // Desktop row
+        html += '<div class="patient-row">';
+        html += '<span class="pr-jam">' + safe(r.jam) + '</span>';
+        html += '<span class="pr-nama">' + safe(r.nama) + '</span>';
+        html += '<span class="pr-rawat">' + safe(r.perawatan) + '</span>';
+        html += '<span class="pr-actions">';
+        html += '<button class="act-btn edit" onclick="openEdit(' + id + ')">&#9998;</button>';
+        html += '<button class="act-btn del" onclick="openConfirm(' + id + ',\'' + namaEnc + '\')">&#128465;</button>';
+        html += '</span></div>';
+        // Mobile card
+        html += '<div class="patient-card">';
+        html += '<div class="pc-top"><span class="pc-nama">' + safe(r.nama) + '</span><span class="pc-jam">' + safe(r.jam) + '</span></div>';
+        html += '<div class="pc-rawat">' + safe(r.perawatan) + '</div>';
+        html += '<div class="pc-actions">';
+        html += '<button class="pc-btn" onclick="openEdit(' + id + ')">&#9998; Edit</button>';
+        html += '<button class="pc-btn" style="color:var(--danger)" onclick="openConfirm(' + id + ',\'' + namaEnc + '\')">&#128465; Hapus</button>';
+        html += '</div></div>';
       });
-      // Mobile cards
-      rows.forEach(function(r){
-        html+='<div class="patient-card"><div class="pc-top"><span class="pc-nama">'+r.nama+'</span><span class="pc-jam">'+r.jam+'</span></div>';
-        html+='<div class="pc-rawat">'+r.perawatan+'</div>';
-        html+='<div class="pc-actions"><button class="pc-btn" onclick="openEdit('+r.id+')">&#9998; Edit</button>';
-        html+='<button class="pc-btn" style="color:var(--danger)" onclick="openConfirm('+r.id+',\''+encodeURIComponent(r.nama)+'\')">&#128465; Hapus</button></div></div>';
-      });
-      html+='</div>';
+      html += '</div>';
     });
-    html+='</div>';
+    html += '</div>';
   });
-  if(!html)html='<div class="no-data"><div class="no-data-icon">&#128197;</div>Tidak ada data.</div>';
-  area.innerHTML=html;
+  if (!html) html = '<div class="no-data"><div class="no-data-icon">&#128197;</div>Tidak ada data.</div>';
+  area.innerHTML = html;
 }
 
-// ── EDIT ──────────────────────────────────────────────────────────────────────
-function openEdit(id){
-  var r=allData.find(function(x){return x.id===id;});
-  if(!r)return;
-  editTarget=r;
-  document.getElementById('eNama').value=r.nama;
-  document.getElementById('eCabang').value=r.cabang;
-  document.getElementById('ePerawatan').value=r.perawatan;
-  document.getElementById('eTanggal').value=r.tanggal;
-  document.getElementById('eJam').value=r.jam;
-  document.getElementById('editOverlay').style.display='flex';
+// ── EDIT ─────────────────────────────────────────────────────────────────────
+function openEdit(id) {
+  var r = allData.find(function(x) { return x.id === id; });
+  if (!r) return;
+  editTarget = r;
+  document.getElementById('eNama').value = r.nama || '';
+  document.getElementById('eCabang').value = r.cabang || 'Malang Sukun';
+  document.getElementById('ePerawatan').value = r.perawatan || '';
+  document.getElementById('eTanggal').value = r.tanggal || '';
+  document.getElementById('eJam').value = r.jam || '';
+  document.getElementById('editOverlay').style.display = 'flex';
 }
-function closeEditModal(){document.getElementById('editOverlay').style.display='none';editTarget=null;}
-async function saveEdit(){
-  if(!editTarget)return;
-  var updated={
-    nama:document.getElementById('eNama').value.trim()||editTarget.nama,
-    cabang:document.getElementById('eCabang').value,
-    perawatan:document.getElementById('ePerawatan').value.trim()||editTarget.perawatan,
-    tanggal:document.getElementById('eTanggal').value.trim()||editTarget.tanggal,
-    jam:document.getElementById('eJam').value.trim()||editTarget.jam
+function closeEditModal() { document.getElementById('editOverlay').style.display = 'none'; editTarget = null; }
+async function saveEdit() {
+  if (!editTarget) return;
+  var updated = {
+    nama:      document.getElementById('eNama').value.trim() || editTarget.nama,
+    cabang:    document.getElementById('eCabang').value,
+    perawatan: document.getElementById('ePerawatan').value.trim() || editTarget.perawatan,
+    tanggal:   document.getElementById('eTanggal').value.trim() || editTarget.tanggal,
+    jam:       document.getElementById('eJam').value.trim() || editTarget.jam
   };
-  try{
-    await updateData(editTarget.id, updated);
-    var idx=allData.findIndex(function(x){return x.id===editTarget.id;});
-    if(idx>-1)Object.assign(allData[idx],updated);
-    closeEditModal();renderRekap();updateStats();
-    addMsg('Data <b>'+updated.nama+'</b> berhasil diperbarui.','bot');
-  }catch(e){
-    addMsg('Gagal memperbarui data. Periksa koneksi.','bot');
-    closeEditModal();
+  try {
+    await dbUpdate(editTarget.id, updated);
+    var idx = allData.findIndex(function(x) { return x.id === editTarget.id; });
+    if (idx > -1) Object.assign(allData[idx], updated);
+    closeEditModal(); renderRekap(); updateStats();
+    addMsg('Data <b>' + updated.nama + '</b> berhasil diperbarui.', 'bot');
+  } catch(e) { addMsg('Gagal update: ' + e.message, 'bot'); closeEditModal(); }
+}
+
+// ── DELETE ───────────────────────────────────────────────────────────────────
+function openConfirm(id, namaEnc) {
+  deleteTarget = { id: id, nama: decodeURIComponent(namaEnc) };
+  document.getElementById('confirmName').textContent = deleteTarget.nama;
+  document.getElementById('confirmOverlay').style.display = 'flex';
+}
+async function doDelete() {
+  if (!deleteTarget) return;
+  try {
+    await dbDelete(deleteTarget.id);
+    allData = allData.filter(function(x) { return x.id !== deleteTarget.id; });
+    document.getElementById('confirmOverlay').style.display = 'none';
+    var nama = deleteTarget.nama; deleteTarget = null;
+    renderRekap(); updateStats();
+    addMsg('Data <b>' + nama + '</b> telah dihapus.', 'bot');
+  } catch(e) {
+    addMsg('Gagal hapus: ' + e.message, 'bot');
+    document.getElementById('confirmOverlay').style.display = 'none';
   }
 }
 
-// ── DELETE ────────────────────────────────────────────────────────────────────
-function openConfirm(id,namaEnc){
-  deleteTarget={id:id,nama:decodeURIComponent(namaEnc)};
-  document.getElementById('confirmName').textContent=deleteTarget.nama;
-  document.getElementById('confirmOverlay').style.display='flex';
-}
-async function doDelete(){
-  if(!deleteTarget)return;
-  try{
-    await deleteData(deleteTarget.id);
-    allData=allData.filter(function(x){return x.id!==deleteTarget.id;});
-    document.getElementById('confirmOverlay').style.display='none';
-    var nama=deleteTarget.nama;deleteTarget=null;
-    renderRekap();updateStats();
-    addMsg('Data <b>'+nama+'</b> telah dihapus.','bot');
-  }catch(e){
-    addMsg('Gagal menghapus data. Periksa koneksi.','bot');
-    document.getElementById('confirmOverlay').style.display='none';
+// ── HAPUS SEMUA ──────────────────────────────────────────────────────────────
+async function doClearAll() {
+  try {
+    await dbDeleteAll();
+    allData = [];
+    document.getElementById('clearOverlay').style.display = 'none';
+    renderRekap(); updateStats();
+    addMsg('Semua data reservasi telah dihapus.', 'bot');
+  } catch(e) {
+    addMsg('Gagal hapus semua: ' + e.message, 'bot');
+    document.getElementById('clearOverlay').style.display = 'none';
   }
 }
 
-// ── HAPUS SEMUA ───────────────────────────────────────────────────────────────
-async function doClearAll(){
-  try{
-    await deleteAll();
-    allData=[];
-    document.getElementById('clearOverlay').style.display='none';
-    renderRekap();updateStats();
-    addMsg('Semua data reservasi telah dihapus.','bot');
-  }catch(e){
-    addMsg('Gagal menghapus semua data. Periksa koneksi.','bot');
-    document.getElementById('clearOverlay').style.display='none';
-  }
-}
-
-// ── COPY WA ───────────────────────────────────────────────────────────────────
-function copyWA(){
-  if(!allData.length){alert('Belum ada data.');return;}
-  var grouped=groupData();
-  var txt='REKAP RESERVASI\n'+'='.repeat(28)+'\n\n';
-  Object.keys(grouped).sort(function(a,b){return dateScore(a)-dateScore(b);}).forEach(function(tgl){
-    txt+='['+tgl+']\n\n';
-    ['Malang Sukun','Dau'].forEach(function(cab){
-      if(!grouped[tgl][cab]||!grouped[tgl][cab].length)return;
-      txt+='('+cab+')\nJam - Nama Pasien - Perawatan\n';
-      grouped[tgl][cab].slice().sort(function(a,b){return toMins(a.jam)-toMins(b.jam);}).forEach(function(r,i){
-        txt+=(i+1)+'. '+r.jam+' - '+r.nama+' - '+r.perawatan+'\n';
+// ── COPY WA ──────────────────────────────────────────────────────────────────
+function copyWA() {
+  if (!allData.length) { alert('Belum ada data.'); return; }
+  var grouped = groupData();
+  var txt = 'REKAP RESERVASI\n' + '='.repeat(28) + '\n\n';
+  Object.keys(grouped).sort(function(a, b) { return dateScore(a) - dateScore(b); }).forEach(function(tgl) {
+    txt += '[' + tgl + ']\n\n';
+    ['Malang Sukun', 'Dau'].forEach(function(cab) {
+      if (!grouped[tgl][cab] || !grouped[tgl][cab].length) return;
+      txt += '(' + cab + ')\nJam - Nama Pasien - Perawatan\n';
+      grouped[tgl][cab].slice().sort(function(a, b) { return toMins(a.jam) - toMins(b.jam); }).forEach(function(r, i) {
+        txt += (i + 1) + '. ' + safe(r.jam) + ' - ' + safe(r.nama) + ' - ' + safe(r.perawatan) + '\n';
       });
-      txt+='\n';
+      txt += '\n';
     });
   });
-  txt+='Total: '+allData.length+' pasien';
-  navigator.clipboard.writeText(txt).then(function(){
-    var b=document.querySelector('.copy-btn'),orig=b.textContent;
-    b.textContent='Tersalin!';b.style.color='var(--accent2)';
-    setTimeout(function(){b.textContent=orig;b.style.color='';},2000);
-  }).catch(function(){alert('Gagal copy. Coba lagi.');});
+  txt += 'Total: ' + allData.length + ' pasien';
+  navigator.clipboard.writeText(txt).then(function() {
+    var b = document.querySelector('.copy-btn'), orig = b.textContent;
+    b.textContent = 'Tersalin!'; b.style.color = 'var(--accent2)';
+    setTimeout(function() { b.textContent = orig; b.style.color = ''; }, 2000);
+  }).catch(function() { alert('Gagal copy.'); });
 }
 
-// ── REALTIME POLLING (setiap 15 detik) ───────────────────────────────────────
-setInterval(async function(){
-  try{
-    var fresh=await sbFetch('reservasi?select=*&order=created_at.asc')||[];
-    if(JSON.stringify(fresh)!==JSON.stringify(allData)){
-      allData=fresh;renderRekap();updateStats();
-    }
+// ── POLLING 15 detik ─────────────────────────────────────────────────────────
+setInterval(async function() {
+  try {
+    var fresh = await dbSelect();
+    if (JSON.stringify(fresh) !== JSON.stringify(allData)) { allData = fresh; renderRekap(); updateStats(); }
     setConn('online');
-  }catch(e){setConn('error');}
-},15000);
+  } catch(e) { setConn('error'); }
+}, 15000);
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
-addMsg('Halo! Siap merekap reservasi. &#128075;<br><br><span style="font-size:12px;color:#8B92A9">Paste atau forward pesan WA:<br><br><span style="font-family:var(--mono);font-size:11px;line-height:2">Reservasi<br>Nama : [nama]<br>Cabang : Malang Sukun / Dau<br>Perawatan : [perawatan]<br>Hari/Tanggal : [tanggal]<br>Jam : [jam]</span></span>','bot');
+// ── INIT ─────────────────────────────────────────────────────────────────────
+addMsg(
+  'Halo! Siap merekap reservasi. &#128075;<br><br>' +
+  '<span style="font-size:12px;color:#8B92A9">Paste atau forward pesan WA:<br><br>' +
+  '<span style="font-family:var(--mono);font-size:11px;line-height:2">' +
+  'Reservasi<br>Nama : [nama]<br>Cabang : Malang Sukun / Dau<br>' +
+  'Perawatan : [perawatan]<br>Hari/Tanggal : [tanggal]<br>Jam : [jam]</span></span>',
+  'bot'
+);
 loadData();
 </script>
 </body>
