@@ -145,11 +145,18 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:13px}
 .cbtn{flex:1;padding:13px;border-radius:9px;font-size:15px;font-weight:500;cursor:pointer;border:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .cbtn.yes{background:var(--danger);color:#fff}.cbtn.no{background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
 
+.date-del-btn{width:22px;height:22px;border-radius:5px;border:1px solid var(--border);background:var(--surface3);cursor:pointer;font-size:11px;color:var(--text3);display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:all .15s;margin-left:4px}
+.date-del-btn:hover,.date-del-btn:active{border-color:var(--danger);background:#2a1818;color:var(--danger)}
+.date-lbl-row{display:flex;align-items:center;margin-bottom:6px}
+.date-lbl{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;flex:1;display:flex;align-items:center;gap:6px}
+.date-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+
 @media(max-width:640px){
   .view-tabs{display:flex}
   .main{grid-template-columns:1fr;position:relative}
-  .chat-panel,.rekap-panel{position:absolute;inset:0;transition:transform .25s ease;z-index:1}
+  .chat-panel,.rekap-panel{position:absolute;inset:0;transition:transform .25s cubic-bezier(.4,0,.2,1);z-index:1}
   .chat-panel.hidden{transform:translateX(-100%)}.rekap-panel.hidden{transform:translateX(100%)}
+  .chat-panel.no-anim,.rekap-panel.no-anim{transition:none}
   .panel-label{display:none}.row-head,.patient-row{display:none}.hstat.hide-mobile{display:none}
 }
 @media(min-width:641px){.patient-card{display:none}}
@@ -233,6 +240,18 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:13px}
     <div class="confirm-btns">
       <button class="cbtn no" type="button" onclick="document.getElementById('clearOverlay').style.display='none'">Batal</button>
       <button class="cbtn yes" type="button" onclick="doClearAll()">Hapus Semua</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM HAPUS HARI -->
+<div class="overlay" id="dayOverlay" style="display:none">
+  <div class="confirm-box">
+    <div style="font-size:28px;margin-bottom:10px">&#128197;</div>
+    <p>Hapus semua data tanggal<br><b id="dayName">-</b>?<br><span style="font-size:11px">Tidak bisa dibatalkan.</span></p>
+    <div class="confirm-btns">
+      <button class="cbtn no" type="button" onclick="document.getElementById('dayOverlay').style.display='none'">Batal</button>
+      <button class="cbtn yes" type="button" onclick="doDeleteDay()">Hapus</button>
     </div>
   </div>
 </div>
@@ -396,13 +415,45 @@ async function loadData() {
   catch(e){console.error('loadData:',e);setConn('error');addMsg('Gagal memuat data: '+e.message,'bot');}
 }
 
-// ── MOBILE ────────────────────────────────────────────────────────────────────
-function switchView(v) {
-  var cp=document.getElementById('chatPanel'),rp=document.getElementById('rekapPanel');
-  var t1=document.getElementById('vtabChat'),t2=document.getElementById('vtabRekap');
-  if(v==='chat'){cp.classList.remove('hidden');rp.classList.add('hidden');t1.classList.add('active');t2.classList.remove('active');}
-  else{rp.classList.remove('hidden');cp.classList.add('hidden');t2.classList.add('active');t1.classList.remove('active');}
+// ── MOBILE SWIPE ─────────────────────────────────────────────────────────────
+var currentView = 'chat';
+function switchView(v, animate) {
+  currentView = v;
+  var cp=document.getElementById('chatPanel'), rp=document.getElementById('rekapPanel');
+  var t1=document.getElementById('vtabChat'), t2=document.getElementById('vtabRekap');
+  if (animate === false) { cp.classList.add('no-anim'); rp.classList.add('no-anim'); }
+  if (v==='chat') {
+    cp.classList.remove('hidden'); rp.classList.add('hidden');
+    t1.classList.add('active'); t2.classList.remove('active');
+  } else {
+    rp.classList.remove('hidden'); cp.classList.add('hidden');
+    t2.classList.add('active'); t1.classList.remove('active');
+  }
+  requestAnimationFrame(function() { cp.classList.remove('no-anim'); rp.classList.remove('no-anim'); });
 }
+
+// Touch swipe
+(function() {
+  var startX=0, startY=0, dragging=false;
+  var THRESHOLD=60, ANGLE=35;
+  document.getElementById('chatPanel').addEventListener('touchstart', function(e){
+    startX=e.touches[0].clientX; startY=e.touches[0].clientY; dragging=true;
+  }, {passive:true});
+  document.getElementById('rekapPanel').addEventListener('touchstart', function(e){
+    startX=e.touches[0].clientX; startY=e.touches[0].clientY; dragging=true;
+  }, {passive:true});
+  function onEnd(e) {
+    if (!dragging) return; dragging=false;
+    var dx=e.changedTouches[0].clientX-startX;
+    var dy=e.changedTouches[0].clientY-startY;
+    if (Math.abs(dx)<THRESHOLD) return;
+    if (Math.abs(dy)/Math.abs(dx)*100 > ANGLE) return; // too vertical
+    if (window.innerWidth>640) return;
+    if (dx<0 && currentView==='chat') switchView('rekap');
+    if (dx>0 && currentView==='rekap') switchView('chat');
+  }
+  document.addEventListener('touchend', onEnd, {passive:true});
+})();
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function nowTime(){return new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});}
@@ -471,7 +522,7 @@ async function send(){
       renderRekap();updateStats();removeTyping();
       addMsg('<div style="margin-bottom:4px">&#10003; Berhasil direkap! <b>'+p.nama+'</b></div>'+
         '<div style="font-size:11.5px;color:#8B92A9;line-height:1.9">&#128205; '+p.cabang+'<br>&#129463; '+p.perawatan+'<br>&#128197; '+p.tanggal+' &middot; &#128336; '+p.jam+'</div>','bot');
-      if(window.innerWidth<=640){setTimeout(function(){switchView('rekap');},600);}
+      if(window.innerWidth<=640){setTimeout(function(){switchView('rekap',true);},600);}
     }else{
       removeTyping();
       addMsg('Format tidak dikenali. Gunakan:<br><br><span style="font-family:var(--mono);font-size:11px;color:#8B92A9;line-height:2">Reservasi<br>Nama : ...<br>Cabang : Malang Sukun / Dau<br>Perawatan : ...<br>Hari/Tanggal : ...<br>Jam : ...</span>','bot');
@@ -514,7 +565,7 @@ function renderRekap(){
   dates.forEach(function(tgl){
     var cabs=['Malang Sukun','Dau'].filter(function(c){return grouped[tgl][c]&&grouped[tgl][c].length>0;});
     if(!cabs.length)return;
-    html+='<div class="date-group"><div class="date-lbl">'+tgl+'</div>';
+    html+='<div class="date-group"><div class="date-lbl-row"><div class="date-lbl">'+tgl+'</div><button class="date-del-btn" type="button" title="Hapus semua tanggal ini" onclick="openDeleteDay(\''+encodeURIComponent(tgl)+'\')">&#128465;</button></div>';
     cabs.forEach(function(cab){
       var ck=cabKey(cab);
       var rows=grouped[tgl][cab].slice().sort(function(a,b){return toMins(a.jam)-toMins(b.jam);});
@@ -580,7 +631,29 @@ async function doDelete(){
     addMsg('Data <b>'+nama+'</b> telah dihapus.','bot');
   }catch(e){addMsg('Gagal hapus: '+e.message,'bot');document.getElementById('confirmOverlay').style.display='none';}
 }
-async function doClearAll(){
+// ── HAPUS HARI ────────────────────────────────────────────────────────────────
+var deleteDayTarget = null;
+function openDeleteDay(tglEnc) {
+  deleteDayTarget = decodeURIComponent(tglEnc);
+  document.getElementById('dayName').textContent = deleteDayTarget;
+  document.getElementById('dayOverlay').style.display = 'flex';
+}
+async function doDeleteDay() {
+  if (!deleteDayTarget) return;
+  var ids = allData.filter(function(r){return r.tanggal===deleteDayTarget;}).map(function(r){return r.id;});
+  try {
+    // Delete semua id pada tanggal tersebut
+    await fetch(API+'?tanggal=eq.'+encodeURIComponent(deleteDayTarget), {method:'DELETE', headers:hdr()});
+    allData = allData.filter(function(r){return r.tanggal!==deleteDayTarget;});
+    document.getElementById('dayOverlay').style.display='none';
+    var tgl=deleteDayTarget; deleteDayTarget=null;
+    renderRekap(); updateStats();
+    addMsg('Semua data tanggal <b>'+tgl+'</b> telah dihapus.','bot');
+  } catch(e) {
+    addMsg('Gagal hapus: '+e.message,'bot');
+    document.getElementById('dayOverlay').style.display='none';
+  }
+}
   try{
     await dbDeleteAll();allData=[];
     document.getElementById('clearOverlay').style.display='none';
