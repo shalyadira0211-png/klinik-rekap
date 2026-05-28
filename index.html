@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"/>
 <title>Rekap Reservasi Klinik Gigi</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -13,9 +13,14 @@
   --text:#E8EBF4;--text2:#8B92A9;--text3:#555E7A;
   --sukun:#4F9EFF;--dau:#38E2A4;--danger:#FF5C5C;
   --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);}
-body{display:flex;flex-direction:column;overflow:hidden;}
+html{height:100%;height:-webkit-fill-available}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font);
+  height:100vh;height:-webkit-fill-available;
+  display:flex;flex-direction:column;overflow:hidden;
+}
 .header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--surface);flex-shrink:0}
 .logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
 .header-info h1{font-size:13px;font-weight:600}
@@ -34,7 +39,7 @@ body{display:flex;flex-direction:column;overflow:hidden;}
 .qbtns{padding:6px 12px;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
 .qbtn{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px 9px;font-size:11px;cursor:pointer;color:var(--text2);transition:all .15s;white-space:nowrap}
 .qbtn:hover,.qbtn:active{background:var(--surface3);color:var(--text);border-color:var(--accent)}
-.messages{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+.messages{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 12px;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth}
 .messages::-webkit-scrollbar{width:0}
 .msg{display:flex;flex-direction:column;gap:3px;animation:fadeUp .2s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -47,12 +52,32 @@ body{display:flex;flex-direction:column;overflow:hidden;}
 .dots{display:flex;gap:4px}.dot{width:6px;height:6px;border-radius:50%;background:var(--text3);animation:bop 1.2s infinite}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes bop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-.input-area{padding:8px 12px;border-top:1px solid var(--border);background:var(--surface);display:flex;gap:6px;align-items:flex-end;flex-shrink:0}
-textarea{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 11px;font-size:13px;color:var(--text);font-family:var(--mono);resize:none;outline:none;line-height:1.5;max-height:100px;transition:border .15s;-webkit-appearance:none}
+
+/* INPUT AREA — fix iOS keyboard push */
+.input-area{
+  padding:8px 12px;
+  padding-bottom: calc(8px + var(--safe-bottom));
+  border-top:1px solid var(--border);
+  background:var(--surface);
+  display:flex;gap:6px;align-items:flex-end;flex-shrink:0;
+  position:relative;z-index:2;
+}
+textarea{
+  flex:1;background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:9px 11px;font-size:16px;/* 16px cegah zoom iOS */
+  color:var(--text);font-family:var(--mono);resize:none;outline:none;
+  line-height:1.5;max-height:100px;transition:border .15s;-webkit-appearance:none;
+}
 textarea:focus{border-color:var(--accent)}
-textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5px}
-.send-btn{width:38px;height:38px;border-radius:10px;background:var(--accent);border:none;cursor:pointer;color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:13px}
+.send-btn{
+  width:42px;height:42px;border-radius:10px;background:var(--accent);border:none;
+  cursor:pointer;color:#fff;font-size:18px;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
 .send-btn:active{transform:scale(.96)}.send-btn:disabled{background:var(--surface3);cursor:not-allowed}
+
 .rekap-panel{display:flex;flex-direction:column;overflow:hidden;background:var(--surface)}
 .rekap-top{padding:7px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:5px;flex-shrink:0}
 .rtabs{display:flex;gap:3px}
@@ -61,7 +86,7 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
 .top-actions{display:flex;gap:5px;margin-left:auto}
 .copy-btn,.clear-btn{font-size:11px;padding:4px 9px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;cursor:pointer;color:var(--text2);transition:all .15s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
 .copy-btn:active{color:var(--text);border-color:var(--accent2)}.clear-btn:active{color:var(--danger);border-color:var(--danger)}
-.rekap-scroll{flex:1;overflow-y:auto;padding:10px;-webkit-overflow-scrolling:touch}
+.rekap-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px}
 .rekap-scroll::-webkit-scrollbar{width:0}
 .date-group{margin-bottom:14px}
 .date-lbl{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
@@ -72,47 +97,58 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
 .dot-sukun{background:var(--sukun)}.dot-dau{background:var(--dau)}
 .cab-name{font-size:12px;font-weight:600}.cab-sukun{color:var(--sukun)}.cab-dau{color:var(--dau)}
 .cab-count{margin-left:auto;font-size:10px;color:var(--text3);font-family:var(--mono);background:var(--surface3);padding:2px 6px;border-radius:8px}
-.row-head{display:grid;grid-template-columns:48px 1fr 1fr 52px;gap:5px;padding:4px 10px;font-size:9.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border)}
-.patient-row{display:grid;grid-template-columns:48px 1fr 1fr 52px;gap:5px;padding:6px 10px;font-size:12px;align-items:center;border-bottom:1px solid var(--border);transition:background .1s}
+.row-head{display:grid;grid-template-columns:52px 1fr 1fr 54px;gap:5px;padding:4px 10px;font-size:9.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border)}
+.patient-row{display:grid;grid-template-columns:52px 1fr 1fr 54px;gap:5px;padding:7px 10px;font-size:12px;align-items:center;border-bottom:1px solid var(--border);transition:background .1s}
 .patient-row:last-child{border-bottom:none}.patient-row:hover{background:var(--surface3)}
-.pr-jam{font-family:var(--mono);font-weight:500;font-size:11px}.pr-nama{color:var(--text)}.pr-rawat{color:var(--text2);font-size:11px}
+.pr-jam{font-family:var(--mono);font-weight:500;font-size:11.5px;color:var(--text)}
+.pr-nama{color:var(--text)}.pr-rawat{color:var(--text2);font-size:11px}
 .pr-actions{display:flex;gap:3px;justify-content:flex-end}
-.act-btn{width:26px;height:26px;border-radius:5px;border:1px solid var(--border);background:var(--surface3);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+.act-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface3);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .act-btn:active{transform:scale(.9)}
-.patient-card{padding:9px 10px;border-bottom:1px solid var(--border)}
+.patient-card{padding:10px 12px;border-bottom:1px solid var(--border)}
 .patient-card:last-child{border-bottom:none}
 .pc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
-.pc-nama{font-size:13px;font-weight:500;color:var(--text)}.pc-jam{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--text)}
-.pc-rawat{font-size:11.5px;color:var(--text2)}
-.pc-actions{display:flex;gap:5px;margin-top:6px}
-.pc-btn{flex:1;padding:6px;border-radius:7px;border:1px solid var(--border);background:var(--surface3);cursor:pointer;font-size:12px;color:var(--text2);text-align:center;-webkit-tap-highlight-color:transparent}
+.pc-nama{font-size:14px;font-weight:500;color:var(--text)}.pc-jam{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--text)}
+.pc-rawat{font-size:12px;color:var(--text2)}
+.pc-actions{display:flex;gap:6px;margin-top:8px}
+.pc-btn{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface3);cursor:pointer;font-size:13px;color:var(--text2);text-align:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .pc-btn:active{transform:scale(.97)}
 .no-data{text-align:center;padding:30px 0;color:var(--text3);font-size:13px}
 .no-data-icon{font-size:24px;margin-bottom:8px}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:flex;align-items:flex-end;justify-content:center}
 @media(min-width:600px){.overlay{align-items:center}}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:420px}
-@media(min-width:600px){.modal{border-radius:14px;width:340px}}
+.modal{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px 16px 0 0;padding:20px;
+  padding-bottom:calc(20px + var(--safe-bottom));
+  width:100%;max-width:420px;
+}
+@media(min-width:600px){.modal{border-radius:14px;width:340px;padding-bottom:20px}}
 .modal h3{font-size:14px;font-weight:600;margin-bottom:16px}
 .field{margin-bottom:12px}
 .field label{font-size:11px;color:var(--text2);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
-.field input,.field select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 11px;font-size:15px;color:var(--text);font-family:var(--font);outline:none;-webkit-appearance:none}
+.field input,.field select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:11px;font-size:16px;color:var(--text);font-family:var(--font);outline:none;-webkit-appearance:none}
 .field input:focus,.field select:focus{border-color:var(--accent)}
 .field select option{background:var(--surface2)}
 .modal-btns{display:flex;gap:8px;margin-top:16px}
-.mbtn{flex:1;padding:11px;border-radius:9px;font-size:14px;font-weight:500;cursor:pointer;border:1px solid var(--border);-webkit-tap-highlight-color:transparent}
+.mbtn{flex:1;padding:13px;border-radius:9px;font-size:15px;font-weight:500;cursor:pointer;border:1px solid var(--border);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .mbtn.save{background:var(--accent);color:#fff;border-color:var(--accent)}.mbtn.cancel{background:var(--surface2);color:var(--text2)}
-.confirm-box{background:var(--surface);border:1px solid var(--danger);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:380px;text-align:center}
-@media(min-width:600px){.confirm-box{border-radius:14px;width:300px}}
+.confirm-box{
+  background:var(--surface);border:1px solid var(--danger);
+  border-radius:16px 16px 0 0;padding:20px;
+  padding-bottom:calc(20px + var(--safe-bottom));
+  width:100%;max-width:380px;text-align:center;
+}
+@media(min-width:600px){.confirm-box{border-radius:14px;width:300px;padding-bottom:20px}}
 .confirm-box p{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6}
 .confirm-btns{display:flex;gap:8px}
-.cbtn{flex:1;padding:11px;border-radius:9px;font-size:14px;font-weight:500;cursor:pointer;border:none;-webkit-tap-highlight-color:transparent}
+.cbtn{flex:1;padding:13px;border-radius:9px;font-size:15px;font-weight:500;cursor:pointer;border:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .cbtn.yes{background:var(--danger);color:#fff}.cbtn.no{background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
+
 @media(max-width:640px){
   .view-tabs{display:flex}
   .main{grid-template-columns:1fr;position:relative}
-  .chat-panel{position:absolute;inset:0;transition:transform .25s ease;z-index:1}
-  .rekap-panel{position:absolute;inset:0;transition:transform .25s ease;z-index:1}
+  .chat-panel,.rekap-panel{position:absolute;inset:0;transition:transform .25s ease;z-index:1}
   .chat-panel.hidden{transform:translateX(-100%)}.rekap-panel.hidden{transform:translateX(100%)}
   .panel-label{display:none}.row-head,.patient-row{display:none}.hstat.hide-mobile{display:none}
 }
@@ -145,7 +181,7 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
     <div class="messages" id="msgs"></div>
     <div class="input-area">
       <textarea id="inp" rows="2" placeholder="Paste / forward pesan reservasi..." oninput="autoH(this)" onkeydown="onKey(event)"></textarea>
-      <button class="send-btn" id="sendBtn" onclick="send()">&#9654;</button>
+      <button class="send-btn" id="sendBtn" onclick="send()" type="button">&#9654;</button>
     </div>
   </div>
   <div class="rekap-panel hidden" id="rekapPanel">
@@ -167,16 +203,16 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
 <div class="overlay" id="editOverlay" style="display:none">
   <div class="modal">
     <h3>&#9998; Edit Data Pasien</h3>
-    <div class="field"><label>Nama</label><input id="eNama" type="text"/></div>
+    <div class="field"><label>Nama</label><input id="eNama" type="text" autocomplete="off"/></div>
     <div class="field"><label>Cabang</label>
       <select id="eCabang"><option value="Malang Sukun">Malang Sukun</option><option value="Dau">Dau</option></select>
     </div>
-    <div class="field"><label>Perawatan</label><input id="ePerawatan" type="text"/></div>
-    <div class="field"><label>Hari/Tanggal</label><input id="eTanggal" type="text" placeholder="28 Mei 2026"/></div>
-    <div class="field"><label>Jam</label><input id="eJam" type="text" placeholder="13.00"/></div>
+    <div class="field"><label>Perawatan</label><input id="ePerawatan" type="text" autocomplete="off"/></div>
+    <div class="field"><label>Hari/Tanggal</label><input id="eTanggal" type="text" placeholder="28 Mei 2026" autocomplete="off"/></div>
+    <div class="field"><label>Jam</label><input id="eJam" type="text" placeholder="13.00" autocomplete="off"/></div>
     <div class="modal-btns">
-      <button class="mbtn cancel" onclick="closeEditModal()">Batal</button>
-      <button class="mbtn save" onclick="saveEdit()">Simpan</button>
+      <button class="mbtn cancel" onclick="closeEditModal()" type="button">Batal</button>
+      <button class="mbtn save" onclick="saveEdit()" type="button">Simpan</button>
     </div>
   </div>
 </div>
@@ -185,8 +221,8 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
     <div style="font-size:28px;margin-bottom:10px">&#128465;</div>
     <p>Hapus data pasien<br><b id="confirmName">-</b>?<br><span style="font-size:11px">Tidak bisa dibatalkan.</span></p>
     <div class="confirm-btns">
-      <button class="cbtn no" onclick="document.getElementById('confirmOverlay').style.display='none'">Batal</button>
-      <button class="cbtn yes" onclick="doDelete()">Hapus</button>
+      <button class="cbtn no" type="button" onclick="document.getElementById('confirmOverlay').style.display='none'">Batal</button>
+      <button class="cbtn yes" type="button" onclick="doDelete()">Hapus</button>
     </div>
   </div>
 </div>
@@ -195,8 +231,8 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
     <div style="font-size:28px;margin-bottom:10px">&#9888;</div>
     <p>Hapus <b>semua data</b> reservasi?<br><span style="font-size:11px">Semua rekap akan terhapus permanen.</span></p>
     <div class="confirm-btns">
-      <button class="cbtn no" onclick="document.getElementById('clearOverlay').style.display='none'">Batal</button>
-      <button class="cbtn yes" onclick="doClearAll()">Hapus Semua</button>
+      <button class="cbtn no" type="button" onclick="document.getElementById('clearOverlay').style.display='none'">Batal</button>
+      <button class="cbtn yes" type="button" onclick="doClearAll()">Hapus Semua</button>
     </div>
   </div>
 </div>
@@ -205,410 +241,389 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
 var SUPA_URL = 'https://cbeibyxbkcwfukbnnewy.supabase.co';
 var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZWlieXhia2N3ZnVrYm5uZXd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3ODY4NDcsImV4cCI6MjA5NTM2Mjg0N30.iUrBvdDmHytzj-PTG8p2YZUtwkNNcGmDE89HLo77mh8';
 var API = SUPA_URL + '/rest/v1/reservasi';
-
 var allData = [], activeTab = 'semua', editTarget = null, deleteTarget = null;
+var TAHUN_INI = new Date().getFullYear();
 
 var SAMPLES = [
-  "Reservasi\nNama : Diana\nCabang : Malang Sukun\nPerawatan : Kontrol Tambal Gigi\nHari/Tanggal : 26 Mei 2026\nJam : 13.00",
-  "Reservasi\nNama : Rizky Pratama\nCabang : Dau\nPerawatan : Cabut Gigi\nHari/Tanggal : 26 Mei 2026\nJam : 10.30",
-  "Reservasi\nNama : Sari Dewi\nCabang : Dau\nPerawatan : Scaling\nHari/Tanggal : 27 Mei 2026\nJam : 09.00"
+  "Reservasi\nNama : Diana\nCabang : Malang Sukun\nPerawatan : Kontrol Tambal Gigi\nHari/Tanggal : 28 Mei 2026\nJam : 13.00",
+  "Reservasi\nNama : Rizky Pratama\nCabang : Dau\nPerawatan : Cabut Gigi\nHari/Tanggal : 28 Mei 2026\nJam : 10.30",
+  "Reservasi\nNama : Sari Dewi\nCabang : Dau\nPerawatan : Scaling\nHari/Tanggal : 29 Mei 2026\nJam : 09.00"
 ];
 
 // ── NORMALISASI TANGGAL ───────────────────────────────────────────────────────
-// Output standar: "28 Mei 2026"
-var BULAN_MAP = {
+// Selalu output: "28 Mei 2026"
+var BMAP = {
   'jan':'Januari','feb':'Februari','mar':'Maret','apr':'April',
-  'mei':'Mei','may':'Mei','jun':'Juni','jul':'Juli','agu':'Agustus','aug':'Agustus',
-  'sep':'September','okt':'Oktober','oct':'Oktober','nov':'November','des':'Desember','dec':'Desember'
+  'mei':'Mei','may':'Mei','jun':'Juni','jul':'Juli',
+  'agu':'Agustus','aug':'Agustus','sep':'September',
+  'okt':'Oktober','oct':'Oktober','nov':'November',
+  'des':'Desember','dec':'Desember'
 };
-var BULAN_ANGKA = {
-  '1':'Januari','2':'Februari','3':'Maret','4':'April','5':'Mei','6':'Juni',
-  '7':'Juli','8':'Agustus','9':'September','10':'Oktober','11':'November','12':'Desember'
-};
+var BNUM = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 
 function normTanggal(raw) {
   if (!raw) return '-';
-  var s = raw.trim();
+  // Bersihkan: hapus nama hari di depan (Senin, Selasa, Rabu, Kamis, Jumat, Jum'at, Sabtu, Minggu)
+  var s = raw.trim().replace(/^(sen(in)?|sel(asa)?|rabu|kam(is)?|jum['']?(at)?|sab(tu)?|ming(gu)?)[,.\s\/\-]*/i, '').trim();
+  // Hapus sisa tanda baca di depan
+  s = s.replace(/^[,.\s\/\-]+/, '').trim();
 
-  // Hapus nama hari di depan: "Jumat,", "Jum'at", "Senin," dll
-  s = s.replace(/^(senin|selasa|rabu|kamis|jum['']?at|sabtu|minggu)[,\s]*/i, '').trim();
+  var tgl, bln, thn;
 
-  // Coba parse: "28 Mei 2026" atau "28 mei" atau "28/5/2026" atau "28-05-2026"
-  var tahunSekarang = new Date().getFullYear();
-
-  // Format angka: 28/5/2026 atau 28-05-26 atau 28.05.2026
-  var mAngka = s.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})$/);
-  if (mAngka) {
-    var tgl = mAngka[1], bln = mAngka[2], thn = mAngka[3];
-    if (thn.length === 2) thn = '20' + thn;
-    var namaBulan = BULAN_ANGKA[String(parseInt(bln))];
-    if (namaBulan) return parseInt(tgl) + ' ' + namaBulan + ' ' + thn;
+  // Format angka: 28/5/2026 | 28-05-2026 | 28.05.26
+  var m1 = s.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})$/);
+  if (m1) {
+    tgl = parseInt(m1[1]); bln = parseInt(m1[2]);
+    thn = m1[3].length === 2 ? 2000 + parseInt(m1[3]) : parseInt(m1[3]);
+    if (bln >= 1 && bln <= 12) return tgl + ' ' + BNUM[bln] + ' ' + thn;
   }
 
-  // Format: "28/5" tanpa tahun
-  var mAngkaTanpaThn = s.match(/^(\d{1,2})[\/\-\.](\d{1,2})$/);
-  if (mAngkaTanpaThn) {
-    var namaBulan = BULAN_ANGKA[String(parseInt(mAngkaTanpaThn[2]))];
-    if (namaBulan) return parseInt(mAngkaTanpaThn[1]) + ' ' + namaBulan + ' ' + tahunSekarang;
+  // Format angka tanpa tahun: 28/5 | 28-05
+  var m2 = s.match(/^(\d{1,2})[\/\-\.](\d{1,2})$/);
+  if (m2) {
+    tgl = parseInt(m2[1]); bln = parseInt(m2[2]);
+    if (bln >= 1 && bln <= 12) return tgl + ' ' + BNUM[bln] + ' ' + TAHUN_INI;
   }
 
-  // Format teks: "28 Mei 2026" atau "28 Mei" atau "28 mei 26"
-  var mTeks = s.match(/^(\d{1,2})\s+([a-zA-Z]+)\s*(\d{0,4})$/);
-  if (mTeks) {
-    var tgl = parseInt(mTeks[1]);
-    var blnRaw = mTeks[2].toLowerCase().substring(0, 3);
-    var thn = mTeks[3] ? (mTeks[3].length === 2 ? '20' + mTeks[3] : mTeks[3]) : tahunSekarang;
-    var namaBulan = BULAN_MAP[blnRaw];
-    if (namaBulan) return tgl + ' ' + namaBulan + ' ' + thn;
-    // Coba nama bulan penuh
-    for (var k in BULAN_MAP) {
-      if (mTeks[2].toLowerCase().startsWith(k)) { namaBulan = BULAN_MAP[k]; break; }
+  // Format teks: "28 Mei 2026" | "28 Mei" | "28 mei 26"
+  var m3 = s.match(/^(\d{1,2})\s+([a-zA-Z]+)\s*(\d{0,4})$/);
+  if (m3) {
+    tgl = parseInt(m3[1]);
+    var blnStr = m3[2].toLowerCase();
+    thn = m3[3] ? (m3[3].length === 2 ? 2000 + parseInt(m3[3]) : parseInt(m3[3])) : TAHUN_INI;
+    // Cari nama bulan: cocokkan 3 karakter pertama
+    var namaBulan = null;
+    for (var k in BMAP) {
+      if (blnStr.startsWith(k)) { namaBulan = BMAP[k]; break; }
+    }
+    // Fallback: cocokkan nama penuh
+    if (!namaBulan) {
+      for (var i = 1; i <= 12; i++) {
+        if (BNUM[i].toLowerCase().startsWith(blnStr.substring(0,3))) { namaBulan = BNUM[i]; break; }
+      }
     }
     if (namaBulan) return tgl + ' ' + namaBulan + ' ' + thn;
   }
 
-  // Tidak bisa parse — kembalikan apa adanya tapi bersih
+  // Tidak bisa parse — kembalikan bersih
   return s;
 }
 
 // ── NORMALISASI CABANG ────────────────────────────────────────────────────────
-// Toleran terhadap variasi penulisan
 function normCab(c) {
   if (!c) return null;
-  var l = c.toLowerCase().replace(/[^a-z0-9]/g, '');
-  // Malang Sukun
-  if (l.includes('sukun') || l.includes('malang') || l === 'ms' || l === 'mlgsukun') return 'Malang Sukun';
-  // Dau
-  if (l.includes('dau') || l === 'd') return 'Dau';
+  var l = c.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+  if (/sukun|malang/.test(l) || l === 'ms') return 'Malang Sukun';
+  if (/\bdau\b/.test(l) || l === 'd' || l === 'dau') return 'Dau';
   return null;
 }
-
-function cabKey(c) { return (c || '').toLowerCase().includes('sukun') ? 'sukun' : 'dau'; }
+function cabKey(c) { return (c||'').toLowerCase().includes('sukun') ? 'sukun' : 'dau'; }
 
 // ── NORMALISASI JAM ───────────────────────────────────────────────────────────
 function normJam(raw) {
   if (!raw) return '-';
-  var s = raw.trim().replace(/[.,]/g, ':').replace(/\s+/g, '');
-  // Sudah format HH:MM atau H:MM
-  var m = s.match(/^(\d{1,2}):(\d{2})$/);
-  if (m) return m[1].padStart(2, '0') + '.' + m[2];
-  // Format HH.MM
-  var m2 = s.match(/^(\d{1,2})\.(\d{2})$/);
-  if (m2) return m2[1].padStart(2, '0') + '.' + m2[2];
-  // Hanya angka seperti "1300"
+  var s = raw.toString().trim()
+    // hapus zona waktu & keterangan ekstra
+    .replace(/\s*(wib|wita|wit|WIB|WITA|WIT)\s*/gi, '')
+    // hapus spasi
+    .replace(/\s+/g, '')
+    // normalkan pemisah jadi titik
+    .replace(/[,:\/\-]/g, '.');
+
+  // HH.MM atau H.MM → pastikan dua digit jam
+  var m1 = s.match(/^(\d{1,2})\.(\d{2})$/);
+  if (m1) return m1[1].padStart(2,'0') + '.' + m1[2];
+
+  // Hanya jam tanpa menit: "9" → "09.00", "13" → "13.00"
+  var m2 = s.match(/^(\d{1,2})$/);
+  if (m2) return m2[1].padStart(2,'0') + '.00';
+
+  // 4 digit: "1300" → "13.00", "930" → "09.30"
   var m3 = s.match(/^(\d{3,4})$/);
-  if (m3) {
-    var str = m3[1].padStart(4, '0');
-    return str.substring(0, 2) + '.' + str.substring(2);
+  if (m3) { var p = m3[1].padStart(4,'0'); return p.slice(0,2) + '.' + p.slice(2); }
+
+  // Format dengan titik lebih dari 1: ambil jam & menit pertama saja
+  var m4 = s.match(/^(\d{1,2})\.(\d{1,2})/);
+  if (m4) {
+    var menit = m4[2].length === 1 ? m4[2] + '0' : m4[2];
+    return m4[1].padStart(2,'0') + '.' + menit;
   }
+
   return s;
 }
 
 // ── SUPABASE ──────────────────────────────────────────────────────────────────
 function hdr(extra) {
-  var h = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' };
+  var h = {'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'};
   if (extra) for (var k in extra) h[k] = extra[k];
   return h;
 }
 async function dbSelect() {
-  var r = await fetch(API + '?select=*&order=created_at.asc', { method: 'GET', headers: hdr() });
-  if (!r.ok) throw new Error('GET ' + r.status + ': ' + await r.text());
+  var r = await fetch(API+'?select=*&order=created_at.asc',{method:'GET',headers:hdr()});
+  if (!r.ok) throw new Error('GET '+r.status+': '+await r.text());
   return await r.json();
 }
 async function dbInsert(row) {
-  var r = await fetch(API, { method: 'POST', headers: hdr({ 'Prefer': 'return=representation' }), body: JSON.stringify(row) });
+  var r = await fetch(API,{method:'POST',headers:hdr({'Prefer':'return=representation'}),body:JSON.stringify(row)});
   var txt = await r.text();
-  if (!r.ok) throw new Error('POST ' + r.status + ': ' + txt);
+  if (!r.ok) throw new Error('POST '+r.status+': '+txt);
   var arr = JSON.parse(txt);
   return Array.isArray(arr) ? arr[0] : arr;
 }
 async function dbUpdate(id, row) {
-  var r = await fetch(API + '?id=eq.' + id, { method: 'PATCH', headers: hdr({ 'Prefer': 'return=minimal' }), body: JSON.stringify(row) });
-  if (!r.ok) throw new Error('PATCH ' + r.status + ': ' + await r.text());
+  var r = await fetch(API+'?id=eq.'+id,{method:'PATCH',headers:hdr({'Prefer':'return=minimal'}),body:JSON.stringify(row)});
+  if (!r.ok) throw new Error('PATCH '+r.status+': '+await r.text());
 }
 async function dbDelete(id) {
-  var r = await fetch(API + '?id=eq.' + id, { method: 'DELETE', headers: hdr() });
-  if (!r.ok) throw new Error('DELETE ' + r.status + ': ' + await r.text());
+  var r = await fetch(API+'?id=eq.'+id,{method:'DELETE',headers:hdr()});
+  if (!r.ok) throw new Error('DELETE '+r.status+': '+await r.text());
 }
 async function dbDeleteAll() {
-  var r = await fetch(API + '?id=gte.0', { method: 'DELETE', headers: hdr() });
-  if (!r.ok) throw new Error('DELETE ALL ' + r.status + ': ' + await r.text());
+  var r = await fetch(API+'?id=gte.0',{method:'DELETE',headers:hdr()});
+  if (!r.ok) throw new Error('DELETE ALL '+r.status+': '+await r.text());
 }
 
 // ── CONN ──────────────────────────────────────────────────────────────────────
 function setConn(s) {
-  var dot = document.getElementById('connDot'), txt = document.getElementById('connTxt');
-  if (s === 'online') { dot.className = 'conn-dot online'; txt.textContent = 'Terhubung'; }
-  else if (s === 'error') { dot.className = 'conn-dot error'; txt.textContent = 'Gagal'; }
-  else { dot.className = 'conn-dot'; txt.textContent = 'Memuat...'; }
+  var dot=document.getElementById('connDot'), txt=document.getElementById('connTxt');
+  if(s==='online'){dot.className='conn-dot online';txt.textContent='Terhubung';}
+  else if(s==='error'){dot.className='conn-dot error';txt.textContent='Gagal';}
+  else{dot.className='conn-dot';txt.textContent='Memuat...';}
 }
 async function loadData() {
   setConn('loading');
-  try { allData = await dbSelect(); setConn('online'); renderRekap(); updateStats(); }
-  catch(e) { console.error('loadData:', e); setConn('error'); addMsg('Gagal memuat data: ' + e.message, 'bot'); }
+  try{allData=await dbSelect();setConn('online');renderRekap();updateStats();}
+  catch(e){console.error('loadData:',e);setConn('error');addMsg('Gagal memuat data: '+e.message,'bot');}
 }
 
 // ── MOBILE ────────────────────────────────────────────────────────────────────
 function switchView(v) {
-  var cp = document.getElementById('chatPanel'), rp = document.getElementById('rekapPanel');
-  var t1 = document.getElementById('vtabChat'), t2 = document.getElementById('vtabRekap');
-  if (v === 'chat') { cp.classList.remove('hidden'); rp.classList.add('hidden'); t1.classList.add('active'); t2.classList.remove('active'); }
-  else { rp.classList.remove('hidden'); cp.classList.add('hidden'); t2.classList.add('active'); t1.classList.remove('active'); }
+  var cp=document.getElementById('chatPanel'),rp=document.getElementById('rekapPanel');
+  var t1=document.getElementById('vtabChat'),t2=document.getElementById('vtabRekap');
+  if(v==='chat'){cp.classList.remove('hidden');rp.classList.add('hidden');t1.classList.add('active');t2.classList.remove('active');}
+  else{rp.classList.remove('hidden');cp.classList.add('hidden');t2.classList.add('active');t1.classList.remove('active');}
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
-function nowTime() { return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); }
-function autoH(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 100) + 'px'; }
-function onKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
-function fillS(i) { var t = document.getElementById('inp'); t.value = SAMPLES[i]; autoH(t); t.focus(); }
-function safe(v) { return (v && typeof v === 'string') ? v : (v || '-'); }
-function toMins(t) {
-  var s = (t || '0').toString().replace(',', '.').replace(':', '.');
-  var p = s.split('.');
-  return (parseInt(p[0]) || 0) * 60 + (parseInt(p[1]) || 0);
-}
-function dateScore(s) {
-  var b = { januari:1,februari:2,maret:3,april:4,mei:5,juni:6,juli:7,agustus:8,september:9,oktober:10,november:11,desember:12 };
-  var m = s.match(/(\d+)\s+(\w+)\s+(\d+)/);
-  if (!m) return 0;
-  return parseInt(m[3]) * 10000 + (b[m[2].toLowerCase()] || 0) * 100 + parseInt(m[1]);
+function nowTime(){return new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});}
+function autoH(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
+function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function fillS(i){var t=document.getElementById('inp');t.value=SAMPLES[i];autoH(t);t.focus();}
+function safe(v){return(v&&typeof v==='string')?v:(v||'-');}
+function toMins(t){var s=(t||'0').toString().replace(',','.').replace(':','.');var p=s.split('.');return(parseInt(p[0])||0)*60+(parseInt(p[1])||0);}
+function dateScore(s){
+  var m=s.match(/(\d+)\s+(\w+)\s+(\d+)/);if(!m)return 0;
+  var bi=BNUM.indexOf(m[2].charAt(0).toUpperCase()+m[2].slice(1).toLowerCase());
+  return parseInt(m[3])*10000+(bi>0?bi:0)*100+parseInt(m[1]);
 }
 
 // ── PARSER ────────────────────────────────────────────────────────────────────
 function parse(msg) {
-  if (!msg || !/reservasi/i.test(msg)) return null;
+  if (!msg||!/reservasi/i.test(msg)) return null;
   function get(labels) {
-    for (var i = 0; i < labels.length; i++) {
-      var re = new RegExp(labels[i] + '\\s*[:\\-]\\s*([^\\n]+)', 'im');
-      var m = msg.match(re);
-      if (m && m[1] && m[1].trim()) return m[1].trim();
+    for (var i=0;i<labels.length;i++) {
+      var re=new RegExp(labels[i]+'\\s*[:\\-]\\s*([^\\n]+)','im');
+      var m=msg.match(re);
+      if(m&&m[1]&&m[1].trim()) return m[1].trim();
     }
     return null;
   }
-  var nama      = get(['nama']);
-  var cabangRaw = get(['cabang']);
-  var perawatan = get(['perawatan']);
-  var tanggalRaw = get(['hari\\s*\\/\\s*tanggal', 'hari\\/tanggal', 'tanggal', 'hari']);
-  var jamRaw    = get(['jam']);
-
-  if (!nama || !cabangRaw) return null;
-
-  var cabang = normCab(cabangRaw);
-  if (!cabang) return { error: 'Cabang "' + cabangRaw + '" tidak dikenal. Tersedia: Malang Sukun, Dau.' };
-
-  return {
-    nama:      nama,
-    cabang:    cabang,
-    perawatan: perawatan || '-',
-    tanggal:   normTanggal(tanggalRaw),
-    jam:       normJam(jamRaw)
-  };
+  var nama=get(['nama']);
+  var cabangRaw=get(['cabang']);
+  var perawatan=get(['perawatan']);
+  var tanggalRaw=get(['hari\\s*\\/\\s*tanggal','hari\\/tanggal','tanggal','hari']);
+  var jamRaw=get(['jam']);
+  if(!nama||!cabangRaw) return null;
+  var cabang=normCab(cabangRaw);
+  if(!cabang) return{error:'Cabang "'+cabangRaw+'" tidak dikenal. Tersedia: Malang Sukun, Dau.'};
+  return{nama:nama,cabang:cabang,perawatan:perawatan||'-',tanggal:normTanggal(tanggalRaw),jam:normJam(jamRaw)};
 }
 
 // ── CHAT ──────────────────────────────────────────────────────────────────────
-function addMsg(text, type) {
-  var box = document.getElementById('msgs');
-  var d = document.createElement('div'); d.className = 'msg ' + type;
-  var b = document.createElement('div'); b.className = 'bubble';
-  if (type === 'user') { b.textContent = text; } else { b.innerHTML = text; }
-  var t = document.createElement('div'); t.className = 'msg-time'; t.textContent = nowTime();
-  d.appendChild(b); d.appendChild(t); box.appendChild(d); box.scrollTop = box.scrollHeight;
+function addMsg(text,type){
+  var box=document.getElementById('msgs');
+  var d=document.createElement('div');d.className='msg '+type;
+  var b=document.createElement('div');b.className='bubble';
+  if(type==='user'){b.textContent=text;}else{b.innerHTML=text;}
+  var t=document.createElement('div');t.className='msg-time';t.textContent=nowTime();
+  d.appendChild(b);d.appendChild(t);box.appendChild(d);box.scrollTop=box.scrollHeight;
 }
-function showTyping() {
-  var box = document.getElementById('msgs');
-  var d = document.createElement('div'); d.className = 'msg bot'; d.id = 'typing';
-  d.innerHTML = '<div class="typing-bbl"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
-  box.appendChild(d); box.scrollTop = box.scrollHeight;
+function showTyping(){
+  var box=document.getElementById('msgs');
+  var d=document.createElement('div');d.className='msg bot';d.id='typing';
+  d.innerHTML='<div class="typing-bbl"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
+  box.appendChild(d);box.scrollTop=box.scrollHeight;
 }
-function removeTyping() { var t = document.getElementById('typing'); if (t) t.remove(); }
-function setBtn(dis) { document.getElementById('sendBtn').disabled = dis; }
+function removeTyping(){var t=document.getElementById('typing');if(t)t.remove();}
+function setBtn(dis){document.getElementById('sendBtn').disabled=dis;}
 
-async function send() {
-  var inp = document.getElementById('inp');
-  var msg = inp.value.trim(); if (!msg) return;
-  inp.value = ''; inp.style.height = 'auto';
-  addMsg(msg, 'user'); showTyping(); setBtn(true);
-  try {
-    var p = parse(msg);
-    if (p) {
-      if (p.error) { removeTyping(); addMsg('&#9888; ' + p.error, 'bot'); setBtn(false); return; }
-      var saved = await dbInsert({ nama: p.nama, cabang: p.cabang, perawatan: p.perawatan, tanggal: p.tanggal, jam: p.jam });
-      if (saved) allData.push(saved);
-      renderRekap(); updateStats(); removeTyping();
-      addMsg(
-        '<div style="margin-bottom:4px">&#10003; Berhasil direkap! <b>' + p.nama + '</b></div>' +
-        '<div style="font-size:11.5px;color:#8B92A9;line-height:1.9">&#128205; ' + p.cabang +
-        '<br>&#129463; ' + p.perawatan +
-        '<br>&#128197; ' + p.tanggal + ' &middot; &#128336; ' + p.jam + '</div>', 'bot'
-      );
-      if (window.innerWidth <= 640) { setTimeout(function() { switchView('rekap'); }, 600); }
-    } else {
+async function send(){
+  var inp=document.getElementById('inp');
+  var msg=inp.value.trim();if(!msg)return;
+  inp.value='';inp.style.height='auto';
+  addMsg(msg,'user');showTyping();setBtn(true);
+  try{
+    var p=parse(msg);
+    if(p){
+      if(p.error){removeTyping();addMsg('&#9888; '+p.error,'bot');setBtn(false);return;}
+      var saved=await dbInsert({nama:p.nama,cabang:p.cabang,perawatan:p.perawatan,tanggal:p.tanggal,jam:p.jam});
+      if(saved)allData.push(saved);
+      renderRekap();updateStats();removeTyping();
+      addMsg('<div style="margin-bottom:4px">&#10003; Berhasil direkap! <b>'+p.nama+'</b></div>'+
+        '<div style="font-size:11.5px;color:#8B92A9;line-height:1.9">&#128205; '+p.cabang+'<br>&#129463; '+p.perawatan+'<br>&#128197; '+p.tanggal+' &middot; &#128336; '+p.jam+'</div>','bot');
+      if(window.innerWidth<=640){setTimeout(function(){switchView('rekap');},600);}
+    }else{
       removeTyping();
-      addMsg('Format tidak dikenali. Gunakan:<br><br>' +
-        '<span style="font-family:var(--mono);font-size:11px;color:#8B92A9;line-height:2">' +
-        'Reservasi<br>Nama : ...<br>Cabang : Malang Sukun / Dau<br>' +
-        'Perawatan : ...<br>Hari/Tanggal : ...<br>Jam : ...</span>', 'bot');
+      addMsg('Format tidak dikenali. Gunakan:<br><br><span style="font-family:var(--mono);font-size:11px;color:#8B92A9;line-height:2">Reservasi<br>Nama : ...<br>Cabang : Malang Sukun / Dau<br>Perawatan : ...<br>Hari/Tanggal : ...<br>Jam : ...</span>','bot');
     }
-  } catch(e) {
-    console.error('send:', e); removeTyping();
-    addMsg('Gagal menyimpan: ' + e.message, 'bot');
-  }
+  }catch(e){console.error('send:',e);removeTyping();addMsg('Gagal menyimpan: '+e.message,'bot');}
   setBtn(false);
 }
 
 // ── STATS ─────────────────────────────────────────────────────────────────────
-function updateStats() {
-  var tot = allData.length, sukun = 0, dau = 0;
-  allData.forEach(function(r) { if (r.cabang === 'Malang Sukun') sukun++; else dau++; });
-  document.getElementById('hTot').textContent = tot;
-  document.getElementById('hSukun').textContent = sukun;
-  document.getElementById('hDau').textContent = dau;
+function updateStats(){
+  var tot=allData.length,sukun=0,dau=0;
+  allData.forEach(function(r){if(r.cabang==='Malang Sukun')sukun++;else dau++;});
+  document.getElementById('hTot').textContent=tot;
+  document.getElementById('hSukun').textContent=sukun;
+  document.getElementById('hDau').textContent=dau;
 }
 
 // ── REKAP ─────────────────────────────────────────────────────────────────────
-function setTab(t, el) {
-  activeTab = t;
-  document.querySelectorAll('.tab').forEach(function(x) { x.classList.remove('active'); });
-  el.classList.add('active'); renderRekap();
-}
-function groupData() {
-  var grouped = {};
-  allData.forEach(function(r) {
-    var tgl = r.tanggal || '-';
-    if (!grouped[tgl]) grouped[tgl] = {};
-    if (!grouped[tgl][r.cabang]) grouped[tgl][r.cabang] = [];
+function setTab(t,el){activeTab=t;document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});el.classList.add('active');renderRekap();}
+function groupData(){
+  var grouped={};
+  var list=activeTab==='hari'?allData.filter(function(r){
+    var today=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+    return normTanggal(r.tanggal)===today;
+  }):allData;
+  list.forEach(function(r){
+    var tgl=r.tanggal||'-';
+    if(!grouped[tgl])grouped[tgl]={};
+    if(!grouped[tgl][r.cabang])grouped[tgl][r.cabang]=[];
     grouped[tgl][r.cabang].push(r);
   });
   return grouped;
 }
-function renderRekap() {
-  var area = document.getElementById('rekapArea');
-  if (!allData.length) {
-    area.innerHTML = '<div class="no-data"><div class="no-data-icon">&#128203;</div>Belum ada reservasi.<br><span style="font-size:11px">Masukkan pesan di tab Input.</span></div>';
-    return;
-  }
-  var grouped = groupData();
-  var dates = Object.keys(grouped).sort(function(a, b) { return dateScore(a) - dateScore(b); });
-  var html = '';
-  dates.forEach(function(tgl) {
-    var cabs = ['Malang Sukun', 'Dau'].filter(function(c) { return grouped[tgl][c] && grouped[tgl][c].length > 0; });
-    if (!cabs.length) return;
-    html += '<div class="date-group"><div class="date-lbl">' + tgl + '</div>';
-    cabs.forEach(function(cab) {
-      var ck = cabKey(cab);
-      var rows = grouped[tgl][cab].slice().sort(function(a, b) { return toMins(a.jam) - toMins(b.jam); });
-      html += '<div class="cab-block"><div class="cab-head"><div class="cab-dot dot-' + ck + '"></div><span class="cab-name cab-' + ck + '">' + cab + '</span><span class="cab-count">' + rows.length + ' pasien</span></div>';
-      html += '<div class="row-head"><span>Jam</span><span>Nama</span><span>Perawatan</span><span></span></div>';
-      rows.forEach(function(r) {
-        var id = r.id, ne = encodeURIComponent(r.nama);
-        html += '<div class="patient-row"><span class="pr-jam">' + safe(r.jam) + '</span><span class="pr-nama">' + safe(r.nama) + '</span><span class="pr-rawat">' + safe(r.perawatan) + '</span><span class="pr-actions"><button class="act-btn edit" onclick="openEdit(' + id + ')">&#9998;</button><button class="act-btn del" onclick="openConfirm(' + id + ',\'' + ne + '\')">&#128465;</button></span></div>';
-        html += '<div class="patient-card"><div class="pc-top"><span class="pc-nama">' + safe(r.nama) + '</span><span class="pc-jam">' + safe(r.jam) + '</span></div><div class="pc-rawat">' + safe(r.perawatan) + '</div><div class="pc-actions"><button class="pc-btn" onclick="openEdit(' + id + ')">&#9998; Edit</button><button class="pc-btn" style="color:var(--danger)" onclick="openConfirm(' + id + ',\'' + ne + '\')">&#128465; Hapus</button></div></div>';
+function renderRekap(){
+  var area=document.getElementById('rekapArea');
+  if(!allData.length){area.innerHTML='<div class="no-data"><div class="no-data-icon">&#128203;</div>Belum ada reservasi.<br><span style="font-size:11px">Masukkan pesan di tab Input.</span></div>';return;}
+  var grouped=groupData();
+  var dates=Object.keys(grouped).sort(function(a,b){return dateScore(a)-dateScore(b);});
+  var html='';
+  dates.forEach(function(tgl){
+    var cabs=['Malang Sukun','Dau'].filter(function(c){return grouped[tgl][c]&&grouped[tgl][c].length>0;});
+    if(!cabs.length)return;
+    html+='<div class="date-group"><div class="date-lbl">'+tgl+'</div>';
+    cabs.forEach(function(cab){
+      var ck=cabKey(cab);
+      var rows=grouped[tgl][cab].slice().sort(function(a,b){return toMins(a.jam)-toMins(b.jam);});
+      html+='<div class="cab-block"><div class="cab-head"><div class="cab-dot dot-'+ck+'"></div><span class="cab-name cab-'+ck+'">'+cab+'</span><span class="cab-count">'+rows.length+' pasien</span></div>';
+      html+='<div class="row-head"><span>Jam</span><span>Nama</span><span>Perawatan</span><span></span></div>';
+      rows.forEach(function(r){
+        var id=r.id,ne=encodeURIComponent(r.nama);
+        html+='<div class="patient-row"><span class="pr-jam">'+safe(r.jam)+'</span><span class="pr-nama">'+safe(r.nama)+'</span><span class="pr-rawat">'+safe(r.perawatan)+'</span><span class="pr-actions"><button class="act-btn edit" type="button" onclick="openEdit('+id+')">&#9998;</button><button class="act-btn del" type="button" onclick="openConfirm('+id+',\''+ne+'\')">&#128465;</button></span></div>';
+        html+='<div class="patient-card"><div class="pc-top"><span class="pc-nama">'+safe(r.nama)+'</span><span class="pc-jam">'+safe(r.jam)+'</span></div><div class="pc-rawat">'+safe(r.perawatan)+'</div><div class="pc-actions"><button class="pc-btn" type="button" onclick="openEdit('+id+')">&#9998; Edit</button><button class="pc-btn" style="color:var(--danger)" type="button" onclick="openConfirm('+id+',\''+ne+'\')">&#128465; Hapus</button></div></div>';
       });
-      html += '</div>';
+      html+='</div>';
     });
-    html += '</div>';
+    html+='</div>';
   });
-  if (!html) html = '<div class="no-data"><div class="no-data-icon">&#128197;</div>Tidak ada data.</div>';
-  area.innerHTML = html;
+  if(!html)html='<div class="no-data"><div class="no-data-icon">&#128197;</div>Tidak ada data.</div>';
+  area.innerHTML=html;
 }
 
 // ── EDIT ──────────────────────────────────────────────────────────────────────
-function openEdit(id) {
-  var r = allData.find(function(x) { return x.id === id; }); if (!r) return;
-  editTarget = r;
-  document.getElementById('eNama').value = r.nama || '';
-  document.getElementById('eCabang').value = r.cabang || 'Malang Sukun';
-  document.getElementById('ePerawatan').value = r.perawatan || '';
-  document.getElementById('eTanggal').value = r.tanggal || '';
-  document.getElementById('eJam').value = r.jam || '';
-  document.getElementById('editOverlay').style.display = 'flex';
+function openEdit(id){
+  var r=allData.find(function(x){return x.id===id;});if(!r)return;
+  editTarget=r;
+  document.getElementById('eNama').value=r.nama||'';
+  document.getElementById('eCabang').value=r.cabang||'Malang Sukun';
+  document.getElementById('ePerawatan').value=r.perawatan||'';
+  document.getElementById('eTanggal').value=r.tanggal||'';
+  document.getElementById('eJam').value=r.jam||'';
+  document.getElementById('editOverlay').style.display='flex';
 }
-function closeEditModal() { document.getElementById('editOverlay').style.display = 'none'; editTarget = null; }
-async function saveEdit() {
-  if (!editTarget) return;
-  var updated = {
-    nama:      document.getElementById('eNama').value.trim() || editTarget.nama,
-    cabang:    document.getElementById('eCabang').value,
-    perawatan: document.getElementById('ePerawatan').value.trim() || editTarget.perawatan,
-    tanggal:   normTanggal(document.getElementById('eTanggal').value.trim()) || editTarget.tanggal,
-    jam:       normJam(document.getElementById('eJam').value.trim()) || editTarget.jam
+function closeEditModal(){document.getElementById('editOverlay').style.display='none';editTarget=null;}
+async function saveEdit(){
+  if(!editTarget)return;
+  var updated={
+    nama:document.getElementById('eNama').value.trim()||editTarget.nama,
+    cabang:document.getElementById('eCabang').value,
+    perawatan:document.getElementById('ePerawatan').value.trim()||editTarget.perawatan,
+    tanggal:normTanggal(document.getElementById('eTanggal').value.trim()||editTarget.tanggal),
+    jam:normJam(document.getElementById('eJam').value.trim()||editTarget.jam)
   };
-  try {
-    await dbUpdate(editTarget.id, updated);
-    var idx = allData.findIndex(function(x) { return x.id === editTarget.id; });
-    if (idx > -1) Object.assign(allData[idx], updated);
-    closeEditModal(); renderRekap(); updateStats();
-    addMsg('Data <b>' + updated.nama + '</b> berhasil diperbarui.', 'bot');
-  } catch(e) { addMsg('Gagal update: ' + e.message, 'bot'); closeEditModal(); }
+  try{
+    await dbUpdate(editTarget.id,updated);
+    var idx=allData.findIndex(function(x){return x.id===editTarget.id;});
+    if(idx>-1)Object.assign(allData[idx],updated);
+    closeEditModal();renderRekap();updateStats();
+    addMsg('Data <b>'+updated.nama+'</b> berhasil diperbarui.','bot');
+  }catch(e){addMsg('Gagal update: '+e.message,'bot');closeEditModal();}
 }
 
 // ── DELETE ────────────────────────────────────────────────────────────────────
-function openConfirm(id, namaEnc) {
-  deleteTarget = { id: id, nama: decodeURIComponent(namaEnc) };
-  document.getElementById('confirmName').textContent = deleteTarget.nama;
-  document.getElementById('confirmOverlay').style.display = 'flex';
+function openConfirm(id,namaEnc){
+  deleteTarget={id:id,nama:decodeURIComponent(namaEnc)};
+  document.getElementById('confirmName').textContent=deleteTarget.nama;
+  document.getElementById('confirmOverlay').style.display='flex';
 }
-async function doDelete() {
-  if (!deleteTarget) return;
-  try {
+async function doDelete(){
+  if(!deleteTarget)return;
+  try{
     await dbDelete(deleteTarget.id);
-    allData = allData.filter(function(x) { return x.id !== deleteTarget.id; });
-    document.getElementById('confirmOverlay').style.display = 'none';
-    var nama = deleteTarget.nama; deleteTarget = null;
-    renderRekap(); updateStats();
-    addMsg('Data <b>' + nama + '</b> telah dihapus.', 'bot');
-  } catch(e) { addMsg('Gagal hapus: ' + e.message, 'bot'); document.getElementById('confirmOverlay').style.display = 'none'; }
+    allData=allData.filter(function(x){return x.id!==deleteTarget.id;});
+    document.getElementById('confirmOverlay').style.display='none';
+    var nama=deleteTarget.nama;deleteTarget=null;
+    renderRekap();updateStats();
+    addMsg('Data <b>'+nama+'</b> telah dihapus.','bot');
+  }catch(e){addMsg('Gagal hapus: '+e.message,'bot');document.getElementById('confirmOverlay').style.display='none';}
 }
-async function doClearAll() {
-  try {
-    await dbDeleteAll(); allData = [];
-    document.getElementById('clearOverlay').style.display = 'none';
-    renderRekap(); updateStats();
-    addMsg('Semua data reservasi telah dihapus.', 'bot');
-  } catch(e) { addMsg('Gagal hapus semua: ' + e.message, 'bot'); document.getElementById('clearOverlay').style.display = 'none'; }
+async function doClearAll(){
+  try{
+    await dbDeleteAll();allData=[];
+    document.getElementById('clearOverlay').style.display='none';
+    renderRekap();updateStats();
+    addMsg('Semua data reservasi telah dihapus.','bot');
+  }catch(e){addMsg('Gagal hapus semua: '+e.message,'bot');document.getElementById('clearOverlay').style.display='none';}
 }
 
 // ── COPY WA ───────────────────────────────────────────────────────────────────
-function copyWA() {
-  if (!allData.length) { alert('Belum ada data.'); return; }
-  var grouped = groupData();
-  var txt = 'REKAP RESERVASI\n' + '='.repeat(28) + '\n\n';
-  Object.keys(grouped).sort(function(a, b) { return dateScore(a) - dateScore(b); }).forEach(function(tgl) {
-    txt += '[' + tgl + ']\n\n';
-    ['Malang Sukun', 'Dau'].forEach(function(cab) {
-      if (!grouped[tgl][cab] || !grouped[tgl][cab].length) return;
-      txt += '(' + cab + ')\nJam - Nama Pasien - Perawatan\n';
-      grouped[tgl][cab].slice().sort(function(a, b) { return toMins(a.jam) - toMins(b.jam); }).forEach(function(r, i) {
-        txt += (i + 1) + '. ' + safe(r.jam) + ' - ' + safe(r.nama) + ' - ' + safe(r.perawatan) + '\n';
+function copyWA(){
+  if(!allData.length){alert('Belum ada data.');return;}
+  var grouped=groupData();
+  var txt='REKAP RESERVASI\n'+'='.repeat(28)+'\n\n';
+  Object.keys(grouped).sort(function(a,b){return dateScore(a)-dateScore(b);}).forEach(function(tgl){
+    txt+='['+tgl+']\n\n';
+    ['Malang Sukun','Dau'].forEach(function(cab){
+      if(!grouped[tgl][cab]||!grouped[tgl][cab].length)return;
+      txt+='('+cab+')\nJam - Nama Pasien - Perawatan\n';
+      grouped[tgl][cab].slice().sort(function(a,b){return toMins(a.jam)-toMins(b.jam);}).forEach(function(r,i){
+        txt+=(i+1)+'. '+safe(r.jam)+' - '+safe(r.nama)+' - '+safe(r.perawatan)+'\n';
       });
-      txt += '\n';
+      txt+='\n';
     });
   });
-  txt += 'Total: ' + allData.length + ' pasien';
-  navigator.clipboard.writeText(txt).then(function() {
-    var b = document.querySelector('.copy-btn'), orig = b.textContent;
-    b.textContent = 'Tersalin!'; b.style.color = 'var(--accent2)';
-    setTimeout(function() { b.textContent = orig; b.style.color = ''; }, 2000);
-  }).catch(function() { alert('Gagal copy.'); });
+  txt+='Total: '+allData.length+' pasien';
+  navigator.clipboard.writeText(txt).then(function(){
+    var b=document.querySelector('.copy-btn'),orig=b.textContent;
+    b.textContent='Tersalin!';b.style.color='var(--accent2)';
+    setTimeout(function(){b.textContent=orig;b.style.color='';},2000);
+  }).catch(function(){alert('Gagal copy.');});
 }
 
 // ── POLLING ───────────────────────────────────────────────────────────────────
-setInterval(async function() {
-  try {
-    var fresh = await dbSelect();
-    if (JSON.stringify(fresh) !== JSON.stringify(allData)) { allData = fresh; renderRekap(); updateStats(); }
+setInterval(async function(){
+  try{
+    var fresh=await dbSelect();
+    if(JSON.stringify(fresh)!==JSON.stringify(allData)){allData=fresh;renderRekap();updateStats();}
     setConn('online');
-  } catch(e) { setConn('error'); }
-}, 15000);
+  }catch(e){setConn('error');}
+},15000);
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-addMsg(
-  'Halo! Siap merekap reservasi. &#128075;<br><br>' +
-  '<span style="font-size:12px;color:#8B92A9">Paste atau forward pesan WA:<br><br>' +
-  '<span style="font-family:var(--mono);font-size:11px;line-height:2">' +
-  'Reservasi<br>Nama : [nama]<br>Cabang : Malang Sukun / Dau<br>' +
-  'Perawatan : [perawatan]<br>Hari/Tanggal : [tanggal]<br>Jam : [jam]</span></span>', 'bot'
-);
+addMsg('Halo! Siap merekap reservasi. &#128075;<br><br><span style="font-size:12px;color:#8B92A9">Paste atau forward pesan WA:<br><br><span style="font-family:var(--mono);font-size:11px;line-height:2">Reservasi<br>Nama : [nama]<br>Cabang : Malang Sukun / Dau<br>Perawatan : [perawatan]<br>Hari/Tanggal : [tanggal]<br>Jam : [jam]</span></span>','bot');
 loadData();
 </script>
 </body>
