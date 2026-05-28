@@ -172,7 +172,7 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
       <select id="eCabang"><option value="Malang Sukun">Malang Sukun</option><option value="Dau">Dau</option></select>
     </div>
     <div class="field"><label>Perawatan</label><input id="ePerawatan" type="text"/></div>
-    <div class="field"><label>Hari/Tanggal</label><input id="eTanggal" type="text" placeholder="26 Mei 2026"/></div>
+    <div class="field"><label>Hari/Tanggal</label><input id="eTanggal" type="text" placeholder="28 Mei 2026"/></div>
     <div class="field"><label>Jam</label><input id="eJam" type="text" placeholder="13.00"/></div>
     <div class="modal-btns">
       <button class="mbtn cancel" onclick="closeEditModal()">Batal</button>
@@ -202,15 +202,11 @@ textarea::placeholder{color:var(--text3);font-family:var(--font);font-size:12.5p
 </div>
 
 <script>
-// ── CONFIG — URL tanpa /rest/v1/ di akhir ────────────────────────────────────
 var SUPA_URL = 'https://cbeibyxbkcwfukbnnewy.supabase.co';
 var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZWlieXhia2N3ZnVrYm5uZXd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3ODY4NDcsImV4cCI6MjA5NTM2Mjg0N30.iUrBvdDmHytzj-PTG8p2YZUtwkNNcGmDE89HLo77mh8';
 var API = SUPA_URL + '/rest/v1/reservasi';
 
-var allData = [];
-var activeTab = 'semua';
-var editTarget = null;
-var deleteTarget = null;
+var allData = [], activeTab = 'semua', editTarget = null, deleteTarget = null;
 
 var SAMPLES = [
   "Reservasi\nNama : Diana\nCabang : Malang Sukun\nPerawatan : Kontrol Tambal Gigi\nHari/Tanggal : 26 Mei 2026\nJam : 13.00",
@@ -218,82 +214,141 @@ var SAMPLES = [
   "Reservasi\nNama : Sari Dewi\nCabang : Dau\nPerawatan : Scaling\nHari/Tanggal : 27 Mei 2026\nJam : 09.00"
 ];
 
-// ── SUPABASE HELPERS ─────────────────────────────────────────────────────────
-function hdr(extra) {
-  var h = {
-    'apikey': SUPA_KEY,
-    'Authorization': 'Bearer ' + SUPA_KEY,
-    'Content-Type': 'application/json'
-  };
-  if (extra) { for (var k in extra) h[k] = extra[k]; }
-  return h;
+// ── NORMALISASI TANGGAL ───────────────────────────────────────────────────────
+// Output standar: "28 Mei 2026"
+var BULAN_MAP = {
+  'jan':'Januari','feb':'Februari','mar':'Maret','apr':'April',
+  'mei':'Mei','may':'Mei','jun':'Juni','jul':'Juli','agu':'Agustus','aug':'Agustus',
+  'sep':'September','okt':'Oktober','oct':'Oktober','nov':'November','des':'Desember','dec':'Desember'
+};
+var BULAN_ANGKA = {
+  '1':'Januari','2':'Februari','3':'Maret','4':'April','5':'Mei','6':'Juni',
+  '7':'Juli','8':'Agustus','9':'September','10':'Oktober','11':'November','12':'Desember'
+};
+
+function normTanggal(raw) {
+  if (!raw) return '-';
+  var s = raw.trim();
+
+  // Hapus nama hari di depan: "Jumat,", "Jum'at", "Senin," dll
+  s = s.replace(/^(senin|selasa|rabu|kamis|jum['']?at|sabtu|minggu)[,\s]*/i, '').trim();
+
+  // Coba parse: "28 Mei 2026" atau "28 mei" atau "28/5/2026" atau "28-05-2026"
+  var tahunSekarang = new Date().getFullYear();
+
+  // Format angka: 28/5/2026 atau 28-05-26 atau 28.05.2026
+  var mAngka = s.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})$/);
+  if (mAngka) {
+    var tgl = mAngka[1], bln = mAngka[2], thn = mAngka[3];
+    if (thn.length === 2) thn = '20' + thn;
+    var namaBulan = BULAN_ANGKA[String(parseInt(bln))];
+    if (namaBulan) return parseInt(tgl) + ' ' + namaBulan + ' ' + thn;
+  }
+
+  // Format: "28/5" tanpa tahun
+  var mAngkaTanpaThn = s.match(/^(\d{1,2})[\/\-\.](\d{1,2})$/);
+  if (mAngkaTanpaThn) {
+    var namaBulan = BULAN_ANGKA[String(parseInt(mAngkaTanpaThn[2]))];
+    if (namaBulan) return parseInt(mAngkaTanpaThn[1]) + ' ' + namaBulan + ' ' + tahunSekarang;
+  }
+
+  // Format teks: "28 Mei 2026" atau "28 Mei" atau "28 mei 26"
+  var mTeks = s.match(/^(\d{1,2})\s+([a-zA-Z]+)\s*(\d{0,4})$/);
+  if (mTeks) {
+    var tgl = parseInt(mTeks[1]);
+    var blnRaw = mTeks[2].toLowerCase().substring(0, 3);
+    var thn = mTeks[3] ? (mTeks[3].length === 2 ? '20' + mTeks[3] : mTeks[3]) : tahunSekarang;
+    var namaBulan = BULAN_MAP[blnRaw];
+    if (namaBulan) return tgl + ' ' + namaBulan + ' ' + thn;
+    // Coba nama bulan penuh
+    for (var k in BULAN_MAP) {
+      if (mTeks[2].toLowerCase().startsWith(k)) { namaBulan = BULAN_MAP[k]; break; }
+    }
+    if (namaBulan) return tgl + ' ' + namaBulan + ' ' + thn;
+  }
+
+  // Tidak bisa parse — kembalikan apa adanya tapi bersih
+  return s;
 }
 
+// ── NORMALISASI CABANG ────────────────────────────────────────────────────────
+// Toleran terhadap variasi penulisan
+function normCab(c) {
+  if (!c) return null;
+  var l = c.toLowerCase().replace(/[^a-z0-9]/g, '');
+  // Malang Sukun
+  if (l.includes('sukun') || l.includes('malang') || l === 'ms' || l === 'mlgsukun') return 'Malang Sukun';
+  // Dau
+  if (l.includes('dau') || l === 'd') return 'Dau';
+  return null;
+}
+
+function cabKey(c) { return (c || '').toLowerCase().includes('sukun') ? 'sukun' : 'dau'; }
+
+// ── NORMALISASI JAM ───────────────────────────────────────────────────────────
+function normJam(raw) {
+  if (!raw) return '-';
+  var s = raw.trim().replace(/[.,]/g, ':').replace(/\s+/g, '');
+  // Sudah format HH:MM atau H:MM
+  var m = s.match(/^(\d{1,2}):(\d{2})$/);
+  if (m) return m[1].padStart(2, '0') + '.' + m[2];
+  // Format HH.MM
+  var m2 = s.match(/^(\d{1,2})\.(\d{2})$/);
+  if (m2) return m2[1].padStart(2, '0') + '.' + m2[2];
+  // Hanya angka seperti "1300"
+  var m3 = s.match(/^(\d{3,4})$/);
+  if (m3) {
+    var str = m3[1].padStart(4, '0');
+    return str.substring(0, 2) + '.' + str.substring(2);
+  }
+  return s;
+}
+
+// ── SUPABASE ──────────────────────────────────────────────────────────────────
+function hdr(extra) {
+  var h = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' };
+  if (extra) for (var k in extra) h[k] = extra[k];
+  return h;
+}
 async function dbSelect() {
-  var r = await fetch(API + '?select=*&order=created_at.asc', {
-    method: 'GET', headers: hdr()
-  });
+  var r = await fetch(API + '?select=*&order=created_at.asc', { method: 'GET', headers: hdr() });
   if (!r.ok) throw new Error('GET ' + r.status + ': ' + await r.text());
   return await r.json();
 }
-
 async function dbInsert(row) {
-  var r = await fetch(API, {
-    method: 'POST',
-    headers: hdr({ 'Prefer': 'return=representation' }),
-    body: JSON.stringify(row)
-  });
+  var r = await fetch(API, { method: 'POST', headers: hdr({ 'Prefer': 'return=representation' }), body: JSON.stringify(row) });
   var txt = await r.text();
   if (!r.ok) throw new Error('POST ' + r.status + ': ' + txt);
   var arr = JSON.parse(txt);
   return Array.isArray(arr) ? arr[0] : arr;
 }
-
 async function dbUpdate(id, row) {
-  var r = await fetch(API + '?id=eq.' + id, {
-    method: 'PATCH',
-    headers: hdr({ 'Prefer': 'return=minimal' }),
-    body: JSON.stringify(row)
-  });
+  var r = await fetch(API + '?id=eq.' + id, { method: 'PATCH', headers: hdr({ 'Prefer': 'return=minimal' }), body: JSON.stringify(row) });
   if (!r.ok) throw new Error('PATCH ' + r.status + ': ' + await r.text());
 }
-
 async function dbDelete(id) {
-  var r = await fetch(API + '?id=eq.' + id, {
-    method: 'DELETE', headers: hdr()
-  });
+  var r = await fetch(API + '?id=eq.' + id, { method: 'DELETE', headers: hdr() });
   if (!r.ok) throw new Error('DELETE ' + r.status + ': ' + await r.text());
 }
-
 async function dbDeleteAll() {
-  var r = await fetch(API + '?id=gte.0', {
-    method: 'DELETE', headers: hdr()
-  });
+  var r = await fetch(API + '?id=gte.0', { method: 'DELETE', headers: hdr() });
   if (!r.ok) throw new Error('DELETE ALL ' + r.status + ': ' + await r.text());
 }
 
-// ── CONN ─────────────────────────────────────────────────────────────────────
+// ── CONN ──────────────────────────────────────────────────────────────────────
 function setConn(s) {
   var dot = document.getElementById('connDot'), txt = document.getElementById('connTxt');
   if (s === 'online') { dot.className = 'conn-dot online'; txt.textContent = 'Terhubung'; }
   else if (s === 'error') { dot.className = 'conn-dot error'; txt.textContent = 'Gagal'; }
   else { dot.className = 'conn-dot'; txt.textContent = 'Memuat...'; }
 }
-
 async function loadData() {
   setConn('loading');
-  try {
-    allData = await dbSelect();
-    setConn('online');
-    renderRekap(); updateStats();
-  } catch(e) {
-    console.error('loadData:', e);
-    setConn('error');
-    addMsg('Gagal memuat data: ' + e.message, 'bot');
-  }
+  try { allData = await dbSelect(); setConn('online'); renderRekap(); updateStats(); }
+  catch(e) { console.error('loadData:', e); setConn('error'); addMsg('Gagal memuat data: ' + e.message, 'bot'); }
 }
 
-// ── MOBILE ───────────────────────────────────────────────────────────────────
+// ── MOBILE ────────────────────────────────────────────────────────────────────
 function switchView(v) {
   var cp = document.getElementById('chatPanel'), rp = document.getElementById('rekapPanel');
   var t1 = document.getElementById('vtabChat'), t2 = document.getElementById('vtabRekap');
@@ -301,20 +356,12 @@ function switchView(v) {
   else { rp.classList.remove('hidden'); cp.classList.add('hidden'); t2.classList.add('active'); t1.classList.remove('active'); }
 }
 
-// ── HELPERS ──────────────────────────────────────────────────────────────────
+// ── HELPERS ───────────────────────────────────────────────────────────────────
 function nowTime() { return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); }
 function autoH(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 100) + 'px'; }
 function onKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
 function fillS(i) { var t = document.getElementById('inp'); t.value = SAMPLES[i]; autoH(t); t.focus(); }
-function safe(v) { return (v && typeof v === 'string') ? v.trim() : (v || ''); }
-function normCab(c) {
-  if (!c) return null;
-  var l = c.toLowerCase();
-  if (l.includes('sukun') || l.includes('malang')) return 'Malang Sukun';
-  if (l.includes('dau')) return 'Dau';
-  return null;
-}
-function cabKey(c) { return (c || '').toLowerCase().includes('sukun') ? 'sukun' : 'dau'; }
+function safe(v) { return (v && typeof v === 'string') ? v : (v || '-'); }
 function toMins(t) {
   var s = (t || '0').toString().replace(',', '.').replace(':', '.');
   var p = s.split('.');
@@ -327,11 +374,9 @@ function dateScore(s) {
   return parseInt(m[3]) * 10000 + (b[m[2].toLowerCase()] || 0) * 100 + parseInt(m[1]);
 }
 
-// ── PARSER ───────────────────────────────────────────────────────────────────
+// ── PARSER ────────────────────────────────────────────────────────────────────
 function parse(msg) {
   if (!msg || !/reservasi/i.test(msg)) return null;
-
-  // Ambil nilai setelah label, toleran terhadap spasi & variasi
   function get(labels) {
     for (var i = 0; i < labels.length; i++) {
       var re = new RegExp(labels[i] + '\\s*[:\\-]\\s*([^\\n]+)', 'im');
@@ -340,12 +385,11 @@ function parse(msg) {
     }
     return null;
   }
-
   var nama      = get(['nama']);
   var cabangRaw = get(['cabang']);
   var perawatan = get(['perawatan']);
-  var tanggal   = get(['hari\\/tanggal', 'hari / tanggal', 'tanggal', 'hari']);
-  var jam       = get(['jam']);
+  var tanggalRaw = get(['hari\\s*\\/\\s*tanggal', 'hari\\/tanggal', 'tanggal', 'hari']);
+  var jamRaw    = get(['jam']);
 
   if (!nama || !cabangRaw) return null;
 
@@ -356,12 +400,12 @@ function parse(msg) {
     nama:      nama,
     cabang:    cabang,
     perawatan: perawatan || '-',
-    tanggal:   tanggal   || '-',
-    jam:       jam       || '-'
+    tanggal:   normTanggal(tanggalRaw),
+    jam:       normJam(jamRaw)
   };
 }
 
-// ── CHAT ─────────────────────────────────────────────────────────────────────
+// ── CHAT ──────────────────────────────────────────────────────────────────────
 function addMsg(text, type) {
   var box = document.getElementById('msgs');
   var d = document.createElement('div'); d.className = 'msg ' + type;
@@ -381,8 +425,7 @@ function setBtn(dis) { document.getElementById('sendBtn').disabled = dis; }
 
 async function send() {
   var inp = document.getElementById('inp');
-  var msg = inp.value.trim();
-  if (!msg) return;
+  var msg = inp.value.trim(); if (!msg) return;
   inp.value = ''; inp.style.height = 'auto';
   addMsg(msg, 'user'); showTyping(); setBtn(true);
   try {
@@ -394,29 +437,26 @@ async function send() {
       renderRekap(); updateStats(); removeTyping();
       addMsg(
         '<div style="margin-bottom:4px">&#10003; Berhasil direkap! <b>' + p.nama + '</b></div>' +
-        '<div style="font-size:11.5px;color:#8B92A9;line-height:1.9">&#128205; ' + p.cabang + '<br>&#129463; ' + p.perawatan + '<br>&#128197; ' + p.tanggal + ' &middot; &#128336; ' + p.jam + '</div>',
-        'bot'
+        '<div style="font-size:11.5px;color:#8B92A9;line-height:1.9">&#128205; ' + p.cabang +
+        '<br>&#129463; ' + p.perawatan +
+        '<br>&#128197; ' + p.tanggal + ' &middot; &#128336; ' + p.jam + '</div>', 'bot'
       );
       if (window.innerWidth <= 640) { setTimeout(function() { switchView('rekap'); }, 600); }
     } else {
       removeTyping();
-      addMsg(
-        'Format tidak dikenali. Gunakan:<br><br>' +
+      addMsg('Format tidak dikenali. Gunakan:<br><br>' +
         '<span style="font-family:var(--mono);font-size:11px;color:#8B92A9;line-height:2">' +
         'Reservasi<br>Nama : ...<br>Cabang : Malang Sukun / Dau<br>' +
-        'Perawatan : ...<br>Hari/Tanggal : ...<br>Jam : ...</span>',
-        'bot'
-      );
+        'Perawatan : ...<br>Hari/Tanggal : ...<br>Jam : ...</span>', 'bot');
     }
   } catch(e) {
-    console.error('send:', e);
-    removeTyping();
+    console.error('send:', e); removeTyping();
     addMsg('Gagal menyimpan: ' + e.message, 'bot');
   }
   setBtn(false);
 }
 
-// ── STATS ────────────────────────────────────────────────────────────────────
+// ── STATS ─────────────────────────────────────────────────────────────────────
 function updateStats() {
   var tot = allData.length, sukun = 0, dau = 0;
   allData.forEach(function(r) { if (r.cabang === 'Malang Sukun') sukun++; else dau++; });
@@ -425,13 +465,12 @@ function updateStats() {
   document.getElementById('hDau').textContent = dau;
 }
 
-// ── REKAP ────────────────────────────────────────────────────────────────────
+// ── REKAP ─────────────────────────────────────────────────────────────────────
 function setTab(t, el) {
   activeTab = t;
   document.querySelectorAll('.tab').forEach(function(x) { x.classList.remove('active'); });
   el.classList.add('active'); renderRekap();
 }
-
 function groupData() {
   var grouped = {};
   allData.forEach(function(r) {
@@ -442,7 +481,6 @@ function groupData() {
   });
   return grouped;
 }
-
 function renderRekap() {
   var area = document.getElementById('rekapArea');
   if (!allData.length) {
@@ -459,29 +497,12 @@ function renderRekap() {
     cabs.forEach(function(cab) {
       var ck = cabKey(cab);
       var rows = grouped[tgl][cab].slice().sort(function(a, b) { return toMins(a.jam) - toMins(b.jam); });
-      html += '<div class="cab-block">';
-      html += '<div class="cab-head"><div class="cab-dot dot-' + ck + '"></div><span class="cab-name cab-' + ck + '">' + cab + '</span><span class="cab-count">' + rows.length + ' pasien</span></div>';
+      html += '<div class="cab-block"><div class="cab-head"><div class="cab-dot dot-' + ck + '"></div><span class="cab-name cab-' + ck + '">' + cab + '</span><span class="cab-count">' + rows.length + ' pasien</span></div>';
       html += '<div class="row-head"><span>Jam</span><span>Nama</span><span>Perawatan</span><span></span></div>';
       rows.forEach(function(r) {
-        var id = r.id;
-        var namaEnc = encodeURIComponent(r.nama);
-        // Desktop row
-        html += '<div class="patient-row">';
-        html += '<span class="pr-jam">' + safe(r.jam) + '</span>';
-        html += '<span class="pr-nama">' + safe(r.nama) + '</span>';
-        html += '<span class="pr-rawat">' + safe(r.perawatan) + '</span>';
-        html += '<span class="pr-actions">';
-        html += '<button class="act-btn edit" onclick="openEdit(' + id + ')">&#9998;</button>';
-        html += '<button class="act-btn del" onclick="openConfirm(' + id + ',\'' + namaEnc + '\')">&#128465;</button>';
-        html += '</span></div>';
-        // Mobile card
-        html += '<div class="patient-card">';
-        html += '<div class="pc-top"><span class="pc-nama">' + safe(r.nama) + '</span><span class="pc-jam">' + safe(r.jam) + '</span></div>';
-        html += '<div class="pc-rawat">' + safe(r.perawatan) + '</div>';
-        html += '<div class="pc-actions">';
-        html += '<button class="pc-btn" onclick="openEdit(' + id + ')">&#9998; Edit</button>';
-        html += '<button class="pc-btn" style="color:var(--danger)" onclick="openConfirm(' + id + ',\'' + namaEnc + '\')">&#128465; Hapus</button>';
-        html += '</div></div>';
+        var id = r.id, ne = encodeURIComponent(r.nama);
+        html += '<div class="patient-row"><span class="pr-jam">' + safe(r.jam) + '</span><span class="pr-nama">' + safe(r.nama) + '</span><span class="pr-rawat">' + safe(r.perawatan) + '</span><span class="pr-actions"><button class="act-btn edit" onclick="openEdit(' + id + ')">&#9998;</button><button class="act-btn del" onclick="openConfirm(' + id + ',\'' + ne + '\')">&#128465;</button></span></div>';
+        html += '<div class="patient-card"><div class="pc-top"><span class="pc-nama">' + safe(r.nama) + '</span><span class="pc-jam">' + safe(r.jam) + '</span></div><div class="pc-rawat">' + safe(r.perawatan) + '</div><div class="pc-actions"><button class="pc-btn" onclick="openEdit(' + id + ')">&#9998; Edit</button><button class="pc-btn" style="color:var(--danger)" onclick="openConfirm(' + id + ',\'' + ne + '\')">&#128465; Hapus</button></div></div>';
       });
       html += '</div>';
     });
@@ -491,10 +512,9 @@ function renderRekap() {
   area.innerHTML = html;
 }
 
-// ── EDIT ─────────────────────────────────────────────────────────────────────
+// ── EDIT ──────────────────────────────────────────────────────────────────────
 function openEdit(id) {
-  var r = allData.find(function(x) { return x.id === id; });
-  if (!r) return;
+  var r = allData.find(function(x) { return x.id === id; }); if (!r) return;
   editTarget = r;
   document.getElementById('eNama').value = r.nama || '';
   document.getElementById('eCabang').value = r.cabang || 'Malang Sukun';
@@ -510,8 +530,8 @@ async function saveEdit() {
     nama:      document.getElementById('eNama').value.trim() || editTarget.nama,
     cabang:    document.getElementById('eCabang').value,
     perawatan: document.getElementById('ePerawatan').value.trim() || editTarget.perawatan,
-    tanggal:   document.getElementById('eTanggal').value.trim() || editTarget.tanggal,
-    jam:       document.getElementById('eJam').value.trim() || editTarget.jam
+    tanggal:   normTanggal(document.getElementById('eTanggal').value.trim()) || editTarget.tanggal,
+    jam:       normJam(document.getElementById('eJam').value.trim()) || editTarget.jam
   };
   try {
     await dbUpdate(editTarget.id, updated);
@@ -522,7 +542,7 @@ async function saveEdit() {
   } catch(e) { addMsg('Gagal update: ' + e.message, 'bot'); closeEditModal(); }
 }
 
-// ── DELETE ───────────────────────────────────────────────────────────────────
+// ── DELETE ────────────────────────────────────────────────────────────────────
 function openConfirm(id, namaEnc) {
   deleteTarget = { id: id, nama: decodeURIComponent(namaEnc) };
   document.getElementById('confirmName').textContent = deleteTarget.nama;
@@ -537,27 +557,18 @@ async function doDelete() {
     var nama = deleteTarget.nama; deleteTarget = null;
     renderRekap(); updateStats();
     addMsg('Data <b>' + nama + '</b> telah dihapus.', 'bot');
-  } catch(e) {
-    addMsg('Gagal hapus: ' + e.message, 'bot');
-    document.getElementById('confirmOverlay').style.display = 'none';
-  }
+  } catch(e) { addMsg('Gagal hapus: ' + e.message, 'bot'); document.getElementById('confirmOverlay').style.display = 'none'; }
 }
-
-// ── HAPUS SEMUA ──────────────────────────────────────────────────────────────
 async function doClearAll() {
   try {
-    await dbDeleteAll();
-    allData = [];
+    await dbDeleteAll(); allData = [];
     document.getElementById('clearOverlay').style.display = 'none';
     renderRekap(); updateStats();
     addMsg('Semua data reservasi telah dihapus.', 'bot');
-  } catch(e) {
-    addMsg('Gagal hapus semua: ' + e.message, 'bot');
-    document.getElementById('clearOverlay').style.display = 'none';
-  }
+  } catch(e) { addMsg('Gagal hapus semua: ' + e.message, 'bot'); document.getElementById('clearOverlay').style.display = 'none'; }
 }
 
-// ── COPY WA ──────────────────────────────────────────────────────────────────
+// ── COPY WA ───────────────────────────────────────────────────────────────────
 function copyWA() {
   if (!allData.length) { alert('Belum ada data.'); return; }
   var grouped = groupData();
@@ -581,7 +592,7 @@ function copyWA() {
   }).catch(function() { alert('Gagal copy.'); });
 }
 
-// ── POLLING 15 detik ─────────────────────────────────────────────────────────
+// ── POLLING ───────────────────────────────────────────────────────────────────
 setInterval(async function() {
   try {
     var fresh = await dbSelect();
@@ -590,14 +601,13 @@ setInterval(async function() {
   } catch(e) { setConn('error'); }
 }, 15000);
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────────────────────
 addMsg(
   'Halo! Siap merekap reservasi. &#128075;<br><br>' +
   '<span style="font-size:12px;color:#8B92A9">Paste atau forward pesan WA:<br><br>' +
   '<span style="font-family:var(--mono);font-size:11px;line-height:2">' +
   'Reservasi<br>Nama : [nama]<br>Cabang : Malang Sukun / Dau<br>' +
-  'Perawatan : [perawatan]<br>Hari/Tanggal : [tanggal]<br>Jam : [jam]</span></span>',
-  'bot'
+  'Perawatan : [perawatan]<br>Hari/Tanggal : [tanggal]<br>Jam : [jam]</span></span>', 'bot'
 );
 loadData();
 </script>
